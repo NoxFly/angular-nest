@@ -4,7 +4,7 @@ Technologie : NodeJS >= 18, NestJS (v10.0)
 
 Projet Typescript.
 
-Utilise Express ou Fastify au fond (peut être choisi).
+Utilise Express ou Fastify au fond (peut être choisi, fastify est bien plus rapide mais a bien plus de risques de conflits de packages).
 
 Pour lancer le projet :
 ```sh
@@ -21,6 +21,9 @@ npm run build
 ```
 
 La commande pour build exécutera automatiquement la commande `npm run postbuild`, qui s'occupe de copier le dossier build d'Angular dans un dossier `public/` à la racine de ce projet (nécessaire pour avoir avoir l'interface du site en prod).
+
+- [origin]/be pour accéder aux endpoints
+- [origin]/be/api pour accéder à l'interface Swagger.
 
 Extensions recommandées pour le développement :
 - ESLint (par Microsoft)
