@@ -1,0 +1,17 @@
+<section>
+    <app-toast *ngIf="requestContent">Réponse de la requête : "{{ requestContent }}"</app-toast>
+
+    <h1>Hello connected user</h1>
+
+    <!-- Dynamic progress bar though time -->
+    <div class="progress-bar">
+        <div class="progress-bar-fill" [class]="progressBarColor" [style.width.%]="nowPerc"></div>
+        <span class="indicator bottom" [style.left.%]="nowPerc">Now</span>
+        <span class="indicator" [style.left.%]="bearerPerc">TTL Bearer Token</span>
+        <span class="indicator" [style.left.%]="refreshPerc">TTL Refresh Token</span>
+    </div>
+
+    <button id="btn-req" class="stroke" (click)="helloWorld()">Faire une requête restreinte</button>
+    <button id="btn-logout" (click)="goToLogout()">Se déconnecter</button>
+
+</section>

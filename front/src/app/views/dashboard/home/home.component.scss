@@ -1,0 +1,79 @@
+section {
+    height: 100vh;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+}
+
+h1 {
+    font-size: 3em;
+    margin: 0 0 50px 0;
+    color: var(--primary-color);
+}
+
+.progress-bar {
+    margin: 50px auto;
+    width: min(500px, 90%);
+    height: 20px;
+    background-color: var(--medium-color);
+    position: relative;
+
+    .progress-bar-fill {
+        height: 100%;
+        transition: background-color .2s ease-in-out;
+        background-color: var(--bg);
+
+        &.danger {
+            --bg: var(--danger-color);
+        }
+
+        &.warning {
+            --bg: var(--warning-color);
+        }
+
+        &.success {
+            --bg: var(--success-color);
+        }
+    }
+
+    .indicator {
+        --o: 5px;
+
+        position: absolute;
+        bottom: calc(100% + var(--o));
+        font-size: .9em;
+        user-select: none;
+        white-space: nowrap;
+        text-align: center;
+        transform: translateX(-50%);
+
+        &:nth-child(odd) {
+            --o: 25px;
+        }
+
+        &::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            width: 1px;
+            height: calc(20px + var(--o));
+            background-color: var(--dark-color-tint);
+        }
+
+        &.bottom {
+            bottom: auto;
+            top: calc(100% + var(--o));
+
+            &::after {
+                top: auto;
+                bottom: 100%;
+            }
+        }
+    }
+}
+
+#btn-logout {
+    margin-top: 50px;
+}

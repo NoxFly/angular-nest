@@ -1,0 +1,151 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-color);
+    color: var(--background-color-contrast);
+    isolation: isolate;
+    min-height: 100vh;
+}
+
+
+.primary {
+    --color1: var(--primary-color);
+    --color2: var(--primary-contrast-color);
+}
+
+.secondary {
+    --color1: var(--secondary-color);
+    --color2: var(--secondary-contrast-color);
+}
+
+.tertiary {
+    --color1: var(--tertiary-color);
+    --color2: var(--tertiary-contrast-color);
+}
+
+.success {
+    --color1: var(--success-color);
+    --color2: var(--success-color-contrast);
+}
+
+.warning {
+    --color1: var(--warning-color);
+    --color2: var(--warning-color-contrast);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    user-select: none;
+}
+
+
+input:where([type="text"], [type="email"], [type="password"]) {
+    display: inline-block;
+    min-width: 200px;
+    border: 1px solid var(--medium-color);
+    background: var(--light-color);
+    color: var(--light-color-contrast);
+    border-radius: 4px;
+    outline: none;
+    padding: 6px 12px;
+    margin: 10px;
+    transition-duration: .2s;
+
+    &:focus {
+        border-color: var(--secondary-color);
+
+        + label {
+            color: var(--secondary-color);
+        }
+    }
+}
+
+button {
+    display: inline-block;
+    padding: 10px 25px;
+    margin: 10px;
+    border: none;
+    border-radius: 4px;
+    transition-duration: .2s;
+    min-width: min(250px, 100%);
+    letter-spacing: .08em;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    user-select: none;
+
+    &:not(:disabled) {
+        cursor: pointer;
+    }
+
+    &:not(.stroke) {
+        @extend .default-button;
+    }
+
+    &.stroke {
+        @extend .stroke-button;
+    }
+}
+
+input[type="checkbox"] {
+    appearance: none;
+    display: inline-block;
+    height: 20px;
+    aspect-ratio: 1/1;
+    margin: 0 10px;
+    border: 1px solid var(--medium-color);
+    border-radius: 4px;
+    background: var(--light-color);
+    outline: none;
+    transition-duration: .1s;
+    position: relative;
+
+    &:checked {
+        &::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 10px;
+            height: 10px;
+            background-color: var(--secondary-color);
+            border-radius: 2px;
+        }
+    }
+}
+
+
+// ------------------------------------------------
+
+.default-button {
+    background-color: var(--light-color-shade);
+    color: var(--light-color-contrast);
+
+    &:not(:disabled) {
+        background-color: var(--primary-color);
+        color: var(--primary-contrast-color);
+
+        &:hover {
+            background-color: var(--secondary-color);
+        }
+    }
+}
+
+.stroke-button {
+    background: transparent;
+    border: 1px solid var(--light-color-shade);
+    color: var(--light-color-shade);
+
+    &:not(:disabled) {
+        border: 1px solid var(--primary-color-tint);
+        color: var(--primary-color-tint);
+
+        &:hover {
+            color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+    }
+}

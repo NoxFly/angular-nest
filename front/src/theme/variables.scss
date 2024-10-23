@@ -1,0 +1,99 @@
+@mixin lightTheme {
+    --primary-color: #333;
+    --primary-color-tint: #555;
+    --primary-color-shade: #333;
+    --primary-contrast-color: #fff;
+
+    --secondary-color: #be4747;
+    --secondary-color-tint: #eb7676;
+    --secondary-contrast-color: #fff;
+
+    --tertiary-color: #1760b8;
+    --tertiary-color-tint: #2a7be3;
+    --tertiary-color-shade: #0d4aa2;
+    --tertiary-contrast-color: #fff;
+
+    --success-color: #28a745;
+    --success-color-contrast: #fff;
+
+    --warning-color: #ffa807;
+    --warning-color-contrast: #fff;
+
+    --danger-color: var(--secondary-color);
+    --danger-color-contrast: var(--secondary-contrast-color);
+
+    --info-color: #1760b8;
+    --info-color-contrast: #fff;
+
+    --background-color: var(--light-color-tint);
+    --background-color-tint: var(--light-color);
+    --background-color-contrast: var(--light-color-contrast);
+
+    --dark-color: #1a1a1a;
+    --dark-color-tint: #222;
+    --dark-color-shade: #333;
+    --dark-color-contrast: #ddd;
+
+    --light-color: #fff;
+    --light-color-tint: #f5f5f5;
+    --light-color-shade: #ccc;
+    --light-color-contrast: #333;
+
+    --medium-color: #888;
+    --medium-color-contrast: #333;
+}
+
+@mixin darkTheme {
+    --primary-color: #333;
+    --primary-color-tint: #666;
+    --primary-color-shade: #333;
+    --primary-contrast-color: #fff;
+
+    --secondary-color: #be4747;
+    --secondary-color-tint: #eb7676;
+    --secondary-contrast-color: #fff;
+
+    --success-color: #28a745;
+    --success-color-contrast: #fff;
+
+    --warning-color: #ffa807;
+    --warning-color-contrast: #fff;
+
+    --danger-color: var(--secondary-color);
+    --danger-color-contrast: var(--secondary-contrast-color);
+
+    --info-color: #1760b8;
+    --info-color-contrast: #fff;
+
+    --light-color: #000;
+    --light-color-tint: #1a1a1a;
+    --light-color-shade: #2f2f2f;
+    --light-color-contrast: #aaa;
+
+    --dark-color: #aaa;
+    --dark-color-tint: #9a9a9a;
+    --dark-color-shade: #888;
+    --dark-color-contrast: #333;
+
+    --medium-color: #444;
+    --medium-color-contrast: #aaa;
+}
+
+// Default theme
+:root {
+    @include lightTheme;
+}
+
+// System preference -----------------------------
+@media (prefers-color-scheme: light) {
+    html:not(.theme-dark):root { // system or light
+        @include lightTheme;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    html:not(.theme-light):root { // system or dark
+        @include darkTheme;
+    }
+}
+// ----------------------------------------------

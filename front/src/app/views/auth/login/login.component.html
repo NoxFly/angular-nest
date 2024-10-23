@@ -1,0 +1,27 @@
+<div class="container">
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <figure class="logo">ANGULAR</figure>
+
+        <div>
+            <input id="username" type="text" formControlName="username" />
+            <label for="username">Username:</label>
+        </div>
+
+        <div>
+            <input id="password" type="password" formControlName="password" />
+            <label for="password">Password:</label>
+        </div>
+
+
+        <label for="remember">
+            <input id="remember" type="checkbox" formControlName="remember" />
+            Remember me 30 days
+        </label>
+
+        <p class="feedback-error-message" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+        <button type="submit" [disabled]="form.invalid">Login</button>
+    </form>
+
+</div>
