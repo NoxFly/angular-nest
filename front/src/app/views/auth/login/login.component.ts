@@ -3,7 +3,6 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { catchError, tap, throwError } from 'rxjs';
-import { Credentials } from 'src/app/core/models/api.type';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { SubscriptionManager } from 'src/app/core/tools/subscription-manager.directive';
 
@@ -19,8 +18,8 @@ export class LoginComponent extends SubscriptionManager {
     public errorMessage?: string;
 
     public constructor(
-        private authService: AuthService,
-        private router: Router,
+        private readonly authService: AuthService,
+        private readonly router: Router,
     ) {
         super();
 
@@ -45,7 +44,7 @@ export class LoginComponent extends SubscriptionManager {
                 this.errorMessage = undefined;
                 this.router.navigateByUrl('/');
             }),
-            catchError((error: any) => {
+            catchError((error: unknown) => {
                 this.errorMessage = "Identifiants faux";
                 return throwError(() => error);
             })

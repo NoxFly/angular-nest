@@ -1,15 +1,14 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, filter, map, Observable, of, switchMap, tap } from 'rxjs';
-import { ApiService } from './api.service';
-import { Bearer } from 'src/app/core/models/bearer.type';
+import { BehaviorSubject, catchError, map, Observable, of, switchMap, tap } from 'rxjs';
 import { Credentials } from 'src/app/core/models/api.type';
+import { ApiService } from './api.service';
 
 
 @Injectable({
     providedIn: 'root'
 })
 export class AuthService {
-    private loginState: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    private readonly loginState: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
     public constructor(
         private readonly api: ApiService,

@@ -19,11 +19,11 @@ export class SubscriptionManager implements OnDestroy {
     }
 
 
-    protected set watch$(observable: Observable<any>) {
+    protected set watch$(observable: Observable<unknown>) {
         observable.pipe(this.untilDestroyed).subscribe();
     }
 
-    ngOnDestroy(): void {
+    public ngOnDestroy(): void {
         this.closedSubject.next();
         this.closedSubject.complete();
     }

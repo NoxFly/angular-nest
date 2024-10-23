@@ -34,12 +34,10 @@ export class ApiService {
     // ----
 
     public login$(credentials: Credentials): Observable<void> {
-        return this.http.post<void>(`${this.backendUrl}/auth/login`, credentials).pipe(
-            tap(() => {console.log('login$');})
-        );
+        return this.http.post<void>(`${this.backendUrl}/auth/login`, credentials);
     }
 
-    public helloWorld$(): Observable<any> {
-        return this.http.get<any>(`${this.backendUrl}/user/hello`);
+    public helloWorld$(): Observable<{ message: string; }> {
+        return this.http.get<{ message: string; }>(`${this.backendUrl}/user/hello`);
     }
 }

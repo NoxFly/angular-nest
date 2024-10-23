@@ -9,12 +9,12 @@ import { DomSanitizer, SafeHtml, SafeResourceUrl, SafeScript, SafeStyle, SafeUrl
 })
 export class SanitizePipe implements PipeTransform {
 
-    constructor(private readonly sanitizer: DomSanitizer) {}
+    public constructor(private readonly sanitizer: DomSanitizer) {}
 
     /**
      * Sanitize the given value
      */
-    transform(value: string, type: string): SafeHtml | SafeStyle | SafeScript | SafeUrl | SafeResourceUrl {
+    public transform(value: string, type: string): SafeHtml | SafeStyle | SafeScript | SafeUrl | SafeResourceUrl {
         switch(type) {
             case 'html':
                 return this.sanitizer.bypassSecurityTrustHtml(value);

@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { of, switchMap, tap } from 'rxjs';
+import { switchMap, tap } from 'rxjs';
 import { ApiService } from 'src/app/core/services/api.service';
 import { SubscriptionManager } from 'src/app/core/tools/subscription-manager.directive';
 import { ToastComponent } from 'src/app/shared/components/toast/toast.component';
@@ -30,8 +30,7 @@ export class HomeComponent extends SubscriptionManager implements OnInit, OnDest
     //
     public progressBarColor: string = 'success';
     //
-    private interval: any;
-    private isRefreshing: boolean = false;
+    private interval!: number;
     //
 
     public constructor(

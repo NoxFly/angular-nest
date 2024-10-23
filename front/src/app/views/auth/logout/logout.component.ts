@@ -5,11 +5,11 @@ import { AuthService } from 'src/app/core/services/auth.service';
 import { SubscriptionManager } from 'src/app/core/tools/subscription-manager.directive';
 
 @Component({
-  selector: 'app-logout',
-  standalone: true,
-  imports: [],
-  templateUrl: './logout.component.html',
-  styleUrl: './logout.component.scss'
+    selector: 'app-logout',
+    standalone: true,
+    imports: [],
+    templateUrl: './logout.component.html',
+    styleUrl: './logout.component.scss'
 })
 export class LogoutComponent extends SubscriptionManager implements OnInit {
     public constructor(
@@ -19,7 +19,7 @@ export class LogoutComponent extends SubscriptionManager implements OnInit {
         super();
     }
 
-    ngOnInit(): void {
+    public ngOnInit(): void {
         this.watch$ = this.auth.logout$().pipe(
             tap(() => {
                 this.router.navigateByUrl('/');
