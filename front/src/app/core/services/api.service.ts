@@ -39,7 +39,7 @@ export class ApiService {
         );
     }
 
-    public helloWorld$(): Observable<any> {
-        return this.http.get<any>(`${this.backendUrl}/user/hello`);
+    public helloWorld$(): Observable<{ message: string; }> {
+        return this.http.get<{ message: string; }>(`${this.backendUrl}/user/hello`);
     }
 }
