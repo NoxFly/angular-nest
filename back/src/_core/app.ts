@@ -82,8 +82,6 @@ function setupSwagger(app: NestExpressApplication): void {
         app,
         document
     );
-
-    console.log(environment.backendUriPrefix + environment.swaggerUriPrefix);
 }
 
 /**
