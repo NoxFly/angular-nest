@@ -1,59 +1,23 @@
-import { BadRequestException, Body, Controller, Get, HttpCode, HttpStatus, Post, Req, Res, UnauthorizedException, UseGuards } from '@nestjs/common';
-import { Request, Response } from 'express';
-import { BearerToken, JwtPayload, TokenType } from 'src/modules/_shared/entities/token';
-import { JwtTokenService } from 'src/modules/_shared/jwt.service';
-import { AuthGuard } from './auth.guard';
-import { AuthService } from './auth.service';
-import { UserCredentials } from './entities/credentials';
+import { Controller, Post, Request, UseGuards } from '@nestjs/common';
+import { AuthService } from 'src/modules/auth/auth.service';
+import { JwtToken } from 'src/modules/auth/entities/jwt.types';
+import { LocalAuthGuard } from 'src/modules/auth/guards/localAuth.guard';
 
 @Controller('auth')
 export class AuthController {
-    public constructor(
-        private readonly authService: AuthService,
-        private readonly jwtService: JwtTokenService,
-    ) {}
+    public constructor(private readonly auth: AuthService) {}
 
-    @HttpCode(HttpStatus.OK)
+    @UseGuards(LocalAuthGuard)
     @Post('login')
-    public async login(@Res() res: Response, @Body() body: UserCredentials): Promise<void> {
-        await this.authService.login(body, res);
-        res.send(); // obligé de renvoyer une réponse, même vide, sinon timeout côté client
+    public login(@Request() req): Promise<JwtToken> {
+        return this.auth.login(req.user);
     }
 
-    @UseGuards(AuthGuard)
-    @Post('check')
-    public checkToken(): boolean {
-        return true;
-    }
 
-    // DEV - DEMO ONLY
-    @UseGuards(AuthGuard)
-    @Get('tokens')
-    public toto(@Req() req: Request): {
-        refreshToken: BearerToken & JwtPayload;
-        accessToken: BearerToken & JwtPayload
-    } {
-        const refreshToken = req.cookies[TokenType.refresh];
-        const accessToken = req.cookies[TokenType.bearer];
-
-        const refresh = this.jwtService.verifyRefreshToken(refreshToken);
-        const access = this.jwtService.verifyAccessToken(accessToken);
-
-        return {
-            refreshToken: {
-                access_token: '',
-                expiresIn: refresh.exp - refresh.iat,
-                expiresAt: refresh.exp * 1000, // sec to ms
-                exp: refresh.exp,
-                iat: refresh.iat,
-            },
-            accessToken: {
-                access_token: '',
-                expiresIn: access.exp - access.iat,
-                expiresAt: access.exp * 1000, // sec to ms
-                exp: access.exp,
-                iat: access.iat,
-            }
-        };
+    @UseGuards(LocalAuthGuard)
+    @Post('logout')
+    public logout(@Request() req): void {
+        const r = req.logout();
+        return r;
     }
 }

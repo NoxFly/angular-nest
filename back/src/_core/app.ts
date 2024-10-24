@@ -5,8 +5,6 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import { join } from "path";
-import { env } from "process";
-import { Logger } from "src/_tools/logger";
 import { convertTime } from "src/_tools/time.helper";
 import { AppModule } from "src/app.module";
 import { environment } from "src/environment/environment";

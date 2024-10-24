@@ -1,23 +1,21 @@
-import { Controller, Get, Param, UseGuards } from '@nestjs/common';
-import { AuthGuard } from 'src/modules/auth/auth.guard';
-import { UserDTO } from './entities/user';
-import { UsersService } from './users.service';
+import { Controller, Get, Param, Request, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/modules/auth/guards/jwtAuth.guard';
+import { UserDTO } from 'src/modules/users/entities/user.types';
+import { UsersService } from 'src/modules/users/users.service';
 
 @Controller('user')
-@UseGuards(AuthGuard)
+@UseGuards(JwtAuthGuard)
 export class UsersController {
     public constructor(
         private readonly usersService: UsersService,
     ) {}
 
-    @Get('hello')
-    public helloWorld(): { message: string } {
-        return {
-            message: 'Hello, world !',
-        };
+    @Get('profile')
+    public getProfile(@Request() req): Promise<UserDTO> {
+        return req.user;
     }
 
-    @Get(':id')
+    @Get('profile/:id')
     public getUser(@Param('id') id: string): Promise<UserDTO> {
         return this.usersService.findOne(id);
     }

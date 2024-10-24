@@ -1,12 +1,12 @@
-import { createHash } from "crypto";
-import { UserModel } from "src/modules/users/entities/user";
+import { hashPassword } from "src/_tools/password";
+import { UserModel } from "src/modules/users/entities/user.types";
 
 export class FakeDatabase {
     public static readonly users: UserModel[] = [
         {
             id: '1',
             name: 'admin',
-            password: createHash('sha256').update('test').digest('hex'),
+            password: hashPassword('test'),
             email: 'admin@gmail.com',
         }
     ];
