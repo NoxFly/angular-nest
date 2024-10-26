@@ -16,7 +16,6 @@ export class AuthInterceptor implements HttpInterceptor {
         return this.checkRequest$(req).pipe(
             switchMap((req) => handler.handle(req)),
             catchError((error: HttpErrorResponse) => {
-                console.warn("AUTH INTERCEPTOR", error);
                 if(error.status === 401) {
                     return this.authService.logout$().pipe(
                         switchMap(() => throwError(() => error))
@@ -30,7 +29,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
     private checkRequest$(req: HttpRequest<unknown>): Observable<HttpRequest<unknown>> {
         const r = req.clone({
-            withCredentials: true,
+            withCredentials: true, // permet la transmission des cookies httpOnly
         });
 
         return of(r);

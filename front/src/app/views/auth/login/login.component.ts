@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { catchError, tap, throwError } from 'rxjs';
+import { catchError, finalize, tap, throwError } from 'rxjs';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { SubscriptionManager } from 'src/app/core/tools/subscription-manager.directive';
 
@@ -11,23 +11,30 @@ import { SubscriptionManager } from 'src/app/core/tools/subscription-manager.dir
     standalone: true,
     imports: [CommonModule, ReactiveFormsModule],
     templateUrl: './login.component.html',
-    styleUrl: './login.component.scss'
+    styleUrl: './login.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent extends SubscriptionManager {
     public form: FormGroup;
     public errorMessage?: string;
+    private isTrying: boolean = false;
 
     public constructor(
         private readonly authService: AuthService,
         private readonly router: Router,
+        private readonly cdr: ChangeDetectorRef,
     ) {
         super();
 
         this.form = new FormGroup({
-            username: new FormControl('', [Validators.required, Validators.maxLength(50)]),
-            password: new FormControl('', [Validators.required, Validators.maxLength(50)]),
+            username: new FormControl('admin', [Validators.required, Validators.maxLength(50)]),
+            password: new FormControl('test', [Validators.required, Validators.maxLength(50)]),
             remember: new FormControl(false),
         });
+    }
+
+    public cannotTryToLogin(): boolean {
+        return this.form.invalid || this.isTrying;
     }
 
     public onSubmit(): void {
@@ -36,6 +43,7 @@ export class LoginComponent extends SubscriptionManager {
         }
 
         this.errorMessage = undefined;
+        this.isTrying = true;
 
         const { username, password, remember } = this.form.getRawValue();
 
@@ -43,11 +51,17 @@ export class LoginComponent extends SubscriptionManager {
             tap(() => {
                 this.errorMessage = undefined;
                 this.router.navigateByUrl('/');
+                // laisse le bouton disabled car en train de se connecter
+                // donc n'a pas à réappuyer dessus
             }),
             catchError((error: unknown) => {
                 this.errorMessage = "Identifiants faux";
+                this.isTrying = false;
                 return throwError(() => error);
-            })
+            }),
+            finalize(() => {
+                this.cdr.detectChanges();
+            }),
         );
     }
 }

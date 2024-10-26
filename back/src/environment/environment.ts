@@ -30,6 +30,7 @@ export const environment = {
     refreshTokenSecret:     "#{REFRESH_TOKEN_SECRET}",
     accessTokenExpiration:  "#{ACCESS_TOKEN_EXPIRATION}",
     refreshTokenExpiration: "#{REFRESH_TOKEN_EXPIRATION}",
+    sessionDuration:        "#{SESSION_DURATION}",
     requestLogLevel:        "#{REQUEST_LOG_LEVEL}",
     appPort:                "#{APP_PORT}",
 };

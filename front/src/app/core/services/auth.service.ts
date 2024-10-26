@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
+import { Store } from '@ngxs/store';
 import { BehaviorSubject, catchError, map, Observable, of, switchMap, tap } from 'rxjs';
 import { Credentials } from 'src/app/core/models/api.type';
-import { ApiService } from './api.service';
+import { ApiService } from 'src/app/core/services/api.service';
+import { RemoveUser, SetUser } from 'src/app/core/states/user.action';
+import { UserState } from 'src/app/core/states/user.state';
 
 
 @Injectable({
@@ -12,6 +15,7 @@ export class AuthService {
 
     public constructor(
         private readonly api: ApiService,
+        private readonly store: Store,
     ) {}
 
     public isAuthenticated$(): Observable<boolean> {
@@ -23,35 +27,34 @@ export class AuthService {
     }
 
     public restore$(): Observable<void> {
-        return of(void 0).pipe(
-            switchMap(() => this.api.check$()),
-            map(() => {
-                this.setLoginState(true);
-                return void 0;
-            }),
-            catchError(() => {
-                this.setLoginState(false);
-                return of(void 0);
-            }),
+        return of(this.store.selectSnapshot(UserState.user)).pipe(
+            map((user) => !!user),
+            switchMap(ok => ok ? this.api.check$() : of(false)),
+            map(ok => this.setLoginState(ok)),
         );
     }
 
     public login$(credentials: Credentials): Observable<void> {
         return this.api.login$(credentials).pipe(
-            switchMap(() => this.api.getTokens$()),
-            map(() => this.setLoginState(true)),
+            map((user) => {
+                this.store.dispatch(new SetUser(user));
+                this.setLoginState(true);
+            }),
         );
     }
 
     public logout$(): Observable<void> {
-        return of(void 0).pipe(
-            tap(() => {
+        return this.api.logout$().pipe(
+            map(() => {
+                this.store.dispatch(new RemoveUser());
                 this.setLoginState(false);
-            })
+            }),
         );
     }
 
     private setLoginState(isLoggedIn: boolean): void {
+        // évite de mettre à jour le state si la valeur n'a pas changé
+        // sinon peut provoquer une boucle infinie
         if(isLoggedIn !== this.loginState.getValue()) {
             this.loginState.next(isLoggedIn);
         }

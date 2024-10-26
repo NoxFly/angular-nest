@@ -3,6 +3,8 @@
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
         <figure class="logo">ANGULAR</figure>
 
+        <p class="feedback-error-message">{{ errorMessage }}</p>
+
         <div>
             <input id="username" type="text" formControlName="username" />
             <label for="username">Username:</label>
@@ -13,16 +15,13 @@
             <label for="password">Password:</label>
         </div>
 
-
         <label for="remember">
             <input id="remember" type="checkbox" formControlName="remember" />
-            Remember me until server hates you
+            Remember me
         </label>
         <small>(if unchecked, it last the time of the session)</small>
 
-        <p class="feedback-error-message" *ngIf="errorMessage">{{ errorMessage }}</p>
-
-        <button type="submit" [disabled]="form.invalid">Login</button>
+        <button type="submit" [disabled]="cannotTryToLogin()">Login</button>
     </form>
 
 </div>

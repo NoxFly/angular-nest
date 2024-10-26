@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import { catchError, Observable, of } from 'rxjs';
 import { Credentials } from 'src/app/core/models/api.type';
-import { Bearer, JwtPayload } from 'src/app/core/models/bearer.type';
+import { User } from 'src/app/core/models/user.type';
 
 @Injectable({
     providedIn: 'root'
@@ -13,31 +13,29 @@ export class ApiService {
         @Inject('BACKEND_URL') private readonly backendUrl: string,
     ) {}
 
+    // Authentification
+
     /**
-     * Le serveur web renvoie `true` si l'utilisateur est connecté, sinon throw sinon.
+     * Demande au backend de vérifier les credentials et de stocker les tokens
+     * dans les cookies.
+     */
+    public login$(credentials: Credentials): Observable<User> {
+        return this.http.post<User>(`${this.backendUrl}/auth/login`, credentials);
+    }
+
+    /**
+     * Demande au backend de supprimer les cookies de bearer/refresh
+     */
+    public logout$(): Observable<void> {
+        return this.http.post<void>(`${this.backendUrl}/auth/logout`, null);
+    }
+
+    /**
+     * Le serveur web renvoie `true` si l'utilisateur est connecté, sinon throw.
      */
     public check$(): Observable<boolean> {
-        return this.http.post<boolean>(`${this.backendUrl}/auth/check`, {});
-    }
-
-    public getTokens$(): Observable<{ refreshToken: Bearer & JwtPayload; accessToken: Bearer & JwtPayload }> {
-        return this.http.get<{ refreshToken: Bearer & JwtPayload; accessToken: Bearer & JwtPayload }>(`${this.backendUrl}/auth/tokens`).pipe(
-            tap(({ accessToken, refreshToken }) => {
-                console.log(new Date(refreshToken.iat * 1000), new Date(accessToken.expiresAt), new Date(refreshToken.expiresAt));
-                localStorage.setItem('bearer_expires_in', accessToken.expiresAt.toString());
-                localStorage.setItem('refresh_expires_in', refreshToken.expiresAt.toString());
-                localStorage.setItem('bearer_start_time', (refreshToken.iat * 1000).toString());
-            }),
+        return this.http.post<boolean>(`${this.backendUrl}/auth/check`, null).pipe(
+            catchError(() => of(false))
         );
-    }
-
-    // ----
-
-    public login$(credentials: Credentials): Observable<void> {
-        return this.http.post<void>(`${this.backendUrl}/auth/login`, credentials);
-    }
-
-    public helloWorld$(): Observable<{ message: string; }> {
-        return this.http.get<{ message: string; }>(`${this.backendUrl}/user/hello`);
     }
 }

@@ -5,15 +5,13 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import { join } from "path";
-import { env } from "process";
-import { Logger } from "src/_tools/logger";
 import { convertTime } from "src/_tools/time.helper";
 import { AppModule } from "src/app.module";
 import { environment } from "src/environment/environment";
 import { publicMiddleware } from "src/middlewares/public.middleware";
 
 
-export async function setup(root: string): Promise<NestExpressApplication> {
+export async function setup(): Promise<NestExpressApplication> {
     const app = await createApp();
 
     configureApp(app);
@@ -84,8 +82,6 @@ function setupSwagger(app: NestExpressApplication): void {
         app,
         document
     );
-
-    console.log(environment.backendUriPrefix + environment.swaggerUriPrefix);
 }
 
 /**

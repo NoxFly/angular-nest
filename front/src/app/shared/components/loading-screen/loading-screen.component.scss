@@ -1,0 +1,21 @@
+.loading-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--background-color-tint);
+    color: var(--medium-color);
+    z-index: 1000;
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out;
+    user-select: none;
+}
+
+.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
