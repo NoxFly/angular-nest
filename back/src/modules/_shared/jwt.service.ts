@@ -38,13 +38,18 @@ export class JwtTokenService {
 
     // Centralise la création d'un refresh token
     public generateRefreshToken(response: Response, payload: UserDTO, remember: boolean): BearerToken {
+        const duration = remember
+            ? environment.refreshTokenExpiration
+            : environment.sessionDuration;
+
         const refreshToken = this.createToken(
             {
                 sub: payload.id,
                 user: payload,
+                remember,
             },
             environment.refreshTokenSecret,
-            environment.refreshTokenExpiration,
+            duration,
         );
 
         this.saveRefreshToken(refreshToken, response, remember);
@@ -52,15 +57,19 @@ export class JwtTokenService {
         return refreshToken;
     }
 
+    public isTokenExpired(token: string): boolean {
+        const payload = this.verifyAccessToken(token, false);
+        return payload.exp < Date.now() / 1000;
+    }
+
     // Vérification du JWT (access token)
-    public verifyAccessToken(token: string): BearerTokenPayload & JwtPayload {
-        return this.verifyToken<BearerTokenPayload>(token, environment.accessTokenSecret);
+    public verifyAccessToken(token: string, throwOnExpiration: boolean=true): BearerTokenPayload & JwtPayload {
+        return this.verifyToken<BearerTokenPayload>(token, environment.accessTokenSecret, !throwOnExpiration);
     }
 
     // Vérification du JWT (refresh token)
     public verifyRefreshToken(token: string): RefreshTokenPayload & JwtPayload {
-        const res = this.verifyToken<RefreshTokenPayload>(token, environment.refreshTokenSecret);
-        return res;
+        return this.verifyToken<RefreshTokenPayload>(token, environment.refreshTokenSecret);
     }
 
     public removeTokens(response: Response): void {
@@ -73,7 +82,10 @@ export class JwtTokenService {
 
     private saveAccessToken(token: BearerToken, response: Response): void {
         const accessTokenExpiration = convertTime(environment.accessTokenExpiration, 'ms');
-        response.cookie(TokenType.bearer, token.access_token, getCookieOptions(accessTokenExpiration));
+
+        const options = getCookieOptions(accessTokenExpiration);
+
+        response.cookie(TokenType.bearer, token.access_token, options);
     }
 
     private saveRefreshToken(token: BearerToken, response: Response, remember: boolean): void {
@@ -81,7 +93,9 @@ export class JwtTokenService {
             ? convertTime(environment.refreshTokenExpiration, 'ms')
             : undefined;
 
-        response.cookie(TokenType.refresh, token.access_token, getCookieOptions(refreshTokenExpiration));
+        const options = getCookieOptions(refreshTokenExpiration);
+
+        response.cookie(TokenType.refresh, token.access_token, options);
     }
 
 
@@ -105,7 +119,7 @@ export class JwtTokenService {
         return bearer;
     }
 
-    private verifyToken<T extends object>(token: string, secret: string): T & JwtPayload {
-        return this.jwtService.verify<T & JwtPayload>(token, { secret });
+    private verifyToken<T extends object>(token: string, secret: string, ignoreExpiration: boolean = false): T & JwtPayload {
+        return this.jwtService.verify<T & JwtPayload>(token, { secret, ignoreExpiration });
     }
 }

@@ -1,0 +1,19 @@
+.spinner-container {
+    --size: 40px;
+    --color: var(--primary-color);
+
+    > div {
+        width: var(--size);
+        height: var(--size);
+        border-radius: 100%;
+        border: 6px solid var(--color);
+        border-top-color: transparent;
+        animation: spin .8s linear infinite;
+    }
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

@@ -27,8 +27,8 @@ export class LoginComponent extends SubscriptionManager {
         super();
 
         this.form = new FormGroup({
-            username: new FormControl('', [Validators.required, Validators.maxLength(50)]),
-            password: new FormControl('', [Validators.required, Validators.maxLength(50)]),
+            username: new FormControl('admin', [Validators.required, Validators.maxLength(50)]),
+            password: new FormControl('test', [Validators.required, Validators.maxLength(50)]),
             remember: new FormControl(false),
         });
     }

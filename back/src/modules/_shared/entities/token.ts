@@ -25,4 +25,5 @@ export type BearerTokenPayload = {
 export type RefreshTokenPayload = {
     sub: string;
     user: UserDTO;
+    remember: boolean;
 };
