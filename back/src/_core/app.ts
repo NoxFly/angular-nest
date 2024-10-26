@@ -23,7 +23,7 @@ export async function setup(root: string): Promise<NestExpressApplication> {
 }
 
 export async function startApp(app: NestExpressApplication): Promise<void> {
-    await app.listen(environment.appPort);
+    await app.listen(environment.appPort, "testbidonyasuo.com");
 }
 
 
@@ -96,10 +96,13 @@ function setupCorsAndCsp(app: NestExpressApplication): void {
         .trim();
 
     const cors: CorsOptions = {
-        origin: environment.frontendOrigin,
+        origin: environment.frontendOrigin.split(' '),
         methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
         credentials: true,
     };
+
+    console.debug('CSP:\n', environment.csp.replace(/; /g, ';\n '));
+    console.debug('CORS:', cors);
 
     app.enableCors(cors);
 }

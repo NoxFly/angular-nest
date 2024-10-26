@@ -11,9 +11,18 @@ export interface JwtToken {
 export interface JwtPayload {
     username: string;
     sub: string;
+    iat: number;
+    exp: number;
 }
+
+export type JwtSubPayload = Omit<JwtPayload, 'iat' | 'exp'>;
 
 export interface JwtUserPayload {
     username: string;
     userId: string;
+}
+
+export interface TokenPairs {
+    accessToken: BearerToken;
+    refreshToken: BearerToken;
 }

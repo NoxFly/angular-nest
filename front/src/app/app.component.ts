@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
-import { SubscriptionManager } from './core/tools/subscription-manager.directive';
-import { AuthService } from './core/services/auth.service';
+import { Router, RouterOutlet } from '@angular/router';
 import { filter, map, tap } from 'rxjs';
+import { AuthService } from './core/services/auth.service';
+import { SubscriptionManager } from './core/tools/subscription-manager.directive';
 
 @Component({
     selector: 'app-root',
@@ -15,7 +15,6 @@ export class AppComponent extends SubscriptionManager implements OnInit {
     public constructor(
         private readonly auth: AuthService,
         private readonly router: Router,
-        private readonly route: ActivatedRoute,
     ) {
         super();
     }
@@ -25,8 +24,6 @@ export class AppComponent extends SubscriptionManager implements OnInit {
             map((isLoggedIn) => isLoggedIn ? '/dashboard/home' : '/auth/login'),
             filter((url) => url !== this.router.url),
             tap((url) => {
-                console.log("current route", this.router.url, this.route.snapshot);
-                console.info("AUTH STATE CHANGED, REDIRECTING TO", url);
                 this.router.navigateByUrl(url);
             })
         );

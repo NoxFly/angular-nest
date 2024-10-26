@@ -1,4 +1,5 @@
 import { CommonModule } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -40,14 +41,29 @@ export class LoginComponent extends SubscriptionManager {
         const { username, password, remember } = this.form.getRawValue();
 
         this.watch$ = this.authService.login$({ username, password, remember }).pipe(
-            tap(() => {
-                this.errorMessage = undefined;
-                this.router.navigateByUrl('/');
-            }),
-            catchError((error: unknown) => {
-                this.errorMessage = "Identifiants faux";
+            tap(() => this.onAfterLoginSuccessful()),
+            catchError((error: HttpErrorResponse) => {
+                this.onAfterLoginFailed(error);
                 return throwError(() => error);
             })
         );
+    }
+
+    private onAfterLoginSuccessful(): void {
+        this.errorMessage = undefined;
+        this.router.navigateByUrl('/');
+    }
+
+    private onAfterLoginFailed(error: HttpErrorResponse): void {
+        switch(error.status) {
+            case 401:
+                this.errorMessage = "Identifiants faux";
+                break;
+            case 500:
+                this.errorMessage = "Une erreur est survenue";
+                break;
+            default:
+                this.errorMessage = "Serveur injoignable";
+        }
     }
 }

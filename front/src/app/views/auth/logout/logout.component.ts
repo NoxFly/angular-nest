@@ -14,16 +14,11 @@ import { SubscriptionManager } from 'src/app/core/tools/subscription-manager.dir
 export class LogoutComponent extends SubscriptionManager implements OnInit {
     public constructor(
         private readonly auth: AuthService,
-        private readonly router: Router,
     ) {
         super();
     }
 
     public ngOnInit(): void {
-        this.watch$ = this.auth.logout$().pipe(
-            tap(() => {
-                this.router.navigateByUrl('/');
-            })
-        );
+        this.watch$ = this.auth.logout$();
     }
 }
