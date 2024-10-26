@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
-import { delay, filter, map, tap, timeout } from 'rxjs';
+import { filter, map, tap } from 'rxjs';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { SubscriptionManager } from 'src/app/core/tools/subscription-manager.directive';
 import { LoadingScreenComponent } from 'src/app/shared/components/loading-screen/loading-screen.component';

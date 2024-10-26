@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
-import { BehaviorSubject, catchError, map, Observable, of, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, map, Observable, of, switchMap } from 'rxjs';
 import { Credentials } from 'src/app/core/models/api.type';
 import { ApiService } from 'src/app/core/services/api.service';
 import { RemoveUser, SetUser } from 'src/app/core/states/user.action';
