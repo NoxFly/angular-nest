@@ -1,9 +1,5 @@
 import * as assert from "assert";
-import { environment } from "./environment";
-
-function getEnvKey(key: string): string {
-    return key.replace(/([A-Z])/g, '_$1').toUpperCase();
-}
+import { environment } from "src/environment/environment";
 
 for(const key in environment) {
     const value = environment[key];

@@ -43,8 +43,8 @@ export class HomeComponent extends SubscriptionManager implements OnInit, OnDest
     public helloWorld(): void {
         this.watch$ = this.api.helloWorld$().pipe(
             tap(response => {
-                console.log(response);
                 this.requestContent = response.message;
+
                 setTimeout(() => {
                     this.requestContent = undefined;
                 }, 1500);

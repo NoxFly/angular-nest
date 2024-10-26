@@ -1,10 +1,10 @@
-import { BadRequestException, Body, Controller, Get, HttpCode, HttpStatus, Post, Req, Res, UnauthorizedException, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { BearerToken, JwtPayload, TokenType } from 'src/modules/_shared/entities/token';
 import { JwtTokenService } from 'src/modules/_shared/jwt.service';
-import { AuthGuard } from './auth.guard';
-import { AuthService } from './auth.service';
-import { UserCredentials } from './entities/credentials';
+import { AuthGuard } from 'src/modules/auth/auth.guard';
+import { AuthService } from 'src/modules/auth/auth.service';
+import { UserCredentials } from 'src/modules/auth/entities/credentials';
 
 @Controller('auth')
 export class AuthController {

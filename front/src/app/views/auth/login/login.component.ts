@@ -16,6 +16,7 @@ import { SubscriptionManager } from 'src/app/core/tools/subscription-manager.dir
 export class LoginComponent extends SubscriptionManager {
     public form: FormGroup;
     public errorMessage?: string;
+    private isTrying: boolean = false;
 
     public constructor(
         private readonly authService: AuthService,
@@ -30,12 +31,17 @@ export class LoginComponent extends SubscriptionManager {
         });
     }
 
+    public cannotTryToLogin(): boolean {
+        return this.form.invalid || this.isTrying;
+    }
+
     public onSubmit(): void {
         if(this.form.invalid) {
             return;
         }
 
         this.errorMessage = undefined;
+        this.isTrying = true;
 
         const { username, password, remember } = this.form.getRawValue();
 
@@ -43,9 +49,12 @@ export class LoginComponent extends SubscriptionManager {
             tap(() => {
                 this.errorMessage = undefined;
                 this.router.navigateByUrl('/');
+                // laisse le bouton disabled car en train de se connecter
+                // donc n'a pas à réappuyer dessus
             }),
             catchError((error: unknown) => {
                 this.errorMessage = "Identifiants faux";
+                this.isTrying = false;
                 return throwError(() => error);
             })
         );

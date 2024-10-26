@@ -1,7 +1,7 @@
 import 'dotenv/config';
-import { setup, startApp } from './_core/app';
-import { environment } from './environment/environment';
-import './environment/validation';
+import 'src/environment/validation';
+import { setup, startApp } from 'src/_core/app';
+import { environment } from 'src/environment/environment';
 
 declare const module: any;
 
@@ -9,7 +9,7 @@ async function bootstrap(): Promise<void> {
     process.stdout.write('\x1Bc');
     environment.root = __dirname;
 
-    const app = await setup(__dirname);
+    const app = await setup();
 
     startApp(app);
 

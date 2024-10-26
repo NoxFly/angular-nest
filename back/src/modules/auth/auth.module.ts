@@ -2,9 +2,9 @@ import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { UsersModule } from 'src/modules/users/users.module';
 import { SharedModule } from 'src/modules/_shared/shared.module';
-import { AuthController } from './auth.controller';
-import { AuthService } from './auth.service';
 import { environment } from 'src/environment/environment';
+import { AuthController } from 'src/modules/auth/auth.controller';
+import { AuthService } from 'src/modules/auth/auth.service';
 
 @Module({
     imports: [

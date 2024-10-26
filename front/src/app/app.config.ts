@@ -4,8 +4,8 @@ import { provideRouter } from '@angular/router';
 import { routes } from 'src/app/app.routes';
 import { AuthInterceptor } from 'src/app/core/interceptors/auth.interceptor';
 import { ApiService } from 'src/app/core/services/api.service';
+import { AuthService } from 'src/app/core/services/auth.service';
 import { environment } from 'src/environments/environment';
-import { AuthService } from './core/services/auth.service';
 
 export const appConfig: ApplicationConfig = {
     providers: [

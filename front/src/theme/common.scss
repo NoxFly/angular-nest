@@ -64,6 +64,10 @@ input:where([type="text"], [type="email"], [type="password"]) {
     }
 }
 
+label[for] {
+    cursor: pointer;
+}
+
 button {
     display: inline-block;
     padding: 10px 25px;
@@ -101,6 +105,7 @@ input[type="checkbox"] {
     outline: none;
     transition-duration: .1s;
     position: relative;
+    cursor: pointer;
 
     &:checked {
         &::after {

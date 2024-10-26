@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, map, Observable, of, switchMap, tap } from 'rxjs';
 import { Credentials } from 'src/app/core/models/api.type';
-import { ApiService } from './api.service';
+import { ApiService } from 'src/app/core/services/api.service';
 
 
 @Injectable({
