@@ -5,7 +5,7 @@ export function getCookieOptions(maxAge?: number): CookieOptions {
     return {
         httpOnly: true,
         secure: environment.production,
-        sameSite: 'strict',
+        sameSite: 'lax',
         maxAge,
     };
 }

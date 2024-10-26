@@ -29,7 +29,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
     private checkRequest$(req: HttpRequest<unknown>): Observable<HttpRequest<unknown>> {
         const r = req.clone({
-            withCredentials: true,
+            withCredentials: true, // permet la transmission des cookies httpOnly
         });
 
         return of(r);

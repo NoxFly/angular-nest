@@ -25,10 +25,7 @@ export class AuthService {
     public restore$(): Observable<void> {
         return of(void 0).pipe(
             switchMap(() => this.api.check$()),
-            map(() => {
-                this.setLoginState(true);
-                return void 0;
-            }),
+            map(() => this.setLoginState(true)),
             catchError(() => {
                 this.setLoginState(false);
                 return of(void 0);
@@ -38,20 +35,21 @@ export class AuthService {
 
     public login$(credentials: Credentials): Observable<void> {
         return this.api.login$(credentials).pipe(
-            switchMap(() => this.api.getTokens$()),
-            map(() => this.setLoginState(true)),
+            map((user) => {
+                this.setLoginState(true);
+            }),
         );
     }
 
     public logout$(): Observable<void> {
-        return of(void 0).pipe(
-            tap(() => {
-                this.setLoginState(false);
-            })
+        return this.api.logout$().pipe(
+            map(() => this.setLoginState(false))
         );
     }
 
     private setLoginState(isLoggedIn: boolean): void {
+        // évite de mettre à jour le state si la valeur n'a pas changé
+        // sinon peut provoquer une boucle infinie
         if(isLoggedIn !== this.loginState.getValue()) {
             this.loginState.next(isLoggedIn);
         }

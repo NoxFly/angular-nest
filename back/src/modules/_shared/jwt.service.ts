@@ -63,6 +63,11 @@ export class JwtTokenService {
         return res;
     }
 
+    public removeTokens(response: Response): void {
+        response.clearCookie(TokenType.bearer);
+        response.clearCookie(TokenType.refresh);
+    }
+
 
     // ----------------------------------------
 

@@ -3,6 +3,7 @@ import { createHash } from 'crypto';
 import { Response } from 'express';
 import { JwtTokenService } from 'src/modules/_shared/jwt.service';
 import { UserCredentials } from 'src/modules/auth/entities/credentials';
+import { UserDTO } from 'src/modules/users/entities/user';
 import { UsersService } from 'src/modules/users/users.service';
 
 @Injectable()
@@ -16,7 +17,7 @@ export class AuthService {
         return createHash('sha256').update(password).digest('hex');
     }
 
-    public async login(credentials: UserCredentials, response: Response): Promise<void> {
+    public async login(credentials: UserCredentials, response: Response): Promise<UserDTO> {
         const hash = this.hashPassword(credentials.password);
 
         const user = await this.usersService.findOne(credentials.username);
@@ -29,5 +30,11 @@ export class AuthService {
 
         this.jwtService.generateRefreshToken(response, payload, credentials.remember);
         this.jwtService.generateBearerToken(response, payload);
+
+        return payload;
+    }
+
+    public logout(response: Response): void {
+        this.jwtService.removeTokens(response);
     }
 }
