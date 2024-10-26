@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { filter, map, tap } from 'rxjs';
 import { AuthService } from 'src/app/core/services/auth.service';
@@ -9,7 +9,8 @@ import { SubscriptionManager } from 'src/app/core/tools/subscription-manager.dir
     standalone: true,
     imports: [RouterOutlet],
     templateUrl: './app.component.html',
-    styleUrl: './app.component.scss'
+    styleUrl: './app.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent extends SubscriptionManager implements OnInit {
     public constructor(

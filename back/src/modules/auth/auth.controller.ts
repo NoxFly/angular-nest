@@ -1,9 +1,8 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
 import { AuthGuard } from 'src/modules/auth/auth.guard';
 import { AuthService } from 'src/modules/auth/auth.service';
 import { UserCredentials } from 'src/modules/auth/entities/credentials';
-import { UserDTO } from 'src/modules/users/entities/user';
 
 @Controller('auth')
 export class AuthController {
@@ -11,16 +10,16 @@ export class AuthController {
         private readonly authService: AuthService,
     ) {}
 
-    @HttpCode(HttpStatus.OK)
     @Post('login')
-    public async login(@Res() res: Response, @Body() body: UserCredentials): Promise<UserDTO> {
-        return this.authService.login(body, res);
+    public async login(@Res() res: Response, @Body() body: UserCredentials): Promise<void> {
+        const user = await this.authService.login(body, res);
+        res.json(user);
     }
 
     @Post('logout')
     public async logout(@Res() res: Response): Promise<void> {
         this.authService.logout(res);
-        res.send(); // obligé de renvoyer une réponse, même vide, sinon timeout côté client
+        res.send();
     }
 
     @UseGuards(AuthGuard)

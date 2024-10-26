@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { catchError, tap, throwError } from 'rxjs';
@@ -11,7 +11,8 @@ import { SubscriptionManager } from 'src/app/core/tools/subscription-manager.dir
     standalone: true,
     imports: [CommonModule, ReactiveFormsModule],
     templateUrl: './login.component.html',
-    styleUrl: './login.component.scss'
+    styleUrl: './login.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent extends SubscriptionManager {
     public form: FormGroup;

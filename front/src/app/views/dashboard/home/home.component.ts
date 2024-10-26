@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { SubscriptionManager } from 'src/app/core/tools/subscription-manager.directive';
 import { ToastComponent } from 'src/app/shared/components/toast/toast.component';
@@ -9,7 +9,8 @@ import { ToastComponent } from 'src/app/shared/components/toast/toast.component'
     standalone: true,
     imports: [CommonModule, ToastComponent],
     templateUrl: './home.component.html',
-    styleUrl: './home.component.scss'
+    styleUrl: './home.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent extends SubscriptionManager {
     public constructor(

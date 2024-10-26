@@ -27,6 +27,11 @@ Le dossier produit contient les fichiers statiques de l'application / interface 
 
 Une commande dans le dossier pour le back permet d'intégrer ce build dans le build final de l'application (côté back).
 
+Mettre à jour les dépendances angular :
+```sh
+ng update @angular/core @angular/cli
+```
+
 Extensions recommandées pour le développement :
 - Angular Language Service (par Angular)
 - ESLint (par Microsoft)
