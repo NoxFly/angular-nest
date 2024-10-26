@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { catchError, tap, throwError } from 'rxjs';
+import { catchError, finalize, tap, throwError } from 'rxjs';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { SubscriptionManager } from 'src/app/core/tools/subscription-manager.directive';
 
@@ -22,6 +22,7 @@ export class LoginComponent extends SubscriptionManager {
     public constructor(
         private readonly authService: AuthService,
         private readonly router: Router,
+        private readonly cdr: ChangeDetectorRef,
     ) {
         super();
 
@@ -57,7 +58,10 @@ export class LoginComponent extends SubscriptionManager {
                 this.errorMessage = "Identifiants faux";
                 this.isTrying = false;
                 return throwError(() => error);
-            })
+            }),
+            finalize(() => {
+                this.cdr.detectChanges();
+            }),
         );
     }
 }

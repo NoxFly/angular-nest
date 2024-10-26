@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { catchError, Observable, of } from 'rxjs';
 import { Credentials } from 'src/app/core/models/api.type';
 import { User } from 'src/app/core/models/user.type';
 
@@ -34,6 +34,8 @@ export class ApiService {
      * Le serveur web renvoie `true` si l'utilisateur est connecté, sinon throw.
      */
     public check$(): Observable<boolean> {
-        return this.http.post<boolean>(`${this.backendUrl}/auth/check`, null);
+        return this.http.post<boolean>(`${this.backendUrl}/auth/check`, null).pipe(
+            catchError(() => of(false))
+        );
     }
 }

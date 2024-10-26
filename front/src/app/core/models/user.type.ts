@@ -3,3 +3,7 @@ export interface User {
     name: string;
     email: string;
 }
+
+export class UserStateModel {
+    public user: User | null = null;
+}

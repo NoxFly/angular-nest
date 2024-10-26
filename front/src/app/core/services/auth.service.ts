@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
+import { Store } from '@ngxs/store';
 import { BehaviorSubject, catchError, map, Observable, of, switchMap, tap } from 'rxjs';
 import { Credentials } from 'src/app/core/models/api.type';
 import { ApiService } from 'src/app/core/services/api.service';
+import { RemoveUser, SetUser } from 'src/app/core/states/user.action';
+import { UserState } from 'src/app/core/states/user.state';
 
 
 @Injectable({
@@ -12,6 +15,7 @@ export class AuthService {
 
     public constructor(
         private readonly api: ApiService,
+        private readonly store: Store,
     ) {}
 
     public isAuthenticated$(): Observable<boolean> {
@@ -23,19 +27,17 @@ export class AuthService {
     }
 
     public restore$(): Observable<void> {
-        return of(void 0).pipe(
-            switchMap(() => this.api.check$()),
-            map(() => this.setLoginState(true)),
-            catchError(() => {
-                this.setLoginState(false);
-                return of(void 0);
-            }),
+        return of(this.store.selectSnapshot(UserState.user)).pipe(
+            map((user) => !!user),
+            switchMap(ok => ok ? this.api.check$() : of(false)),
+            map(ok => this.setLoginState(ok)),
         );
     }
 
     public login$(credentials: Credentials): Observable<void> {
         return this.api.login$(credentials).pipe(
             map((user) => {
+                this.store.dispatch(new SetUser(user));
                 this.setLoginState(true);
             }),
         );
@@ -43,7 +45,10 @@ export class AuthService {
 
     public logout$(): Observable<void> {
         return this.api.logout$().pipe(
-            map(() => this.setLoginState(false))
+            map(() => {
+                this.store.dispatch(new RemoveUser());
+                this.setLoginState(false);
+            }),
         );
     }
 
