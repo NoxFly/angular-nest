@@ -13,16 +13,16 @@ export const environment = {
 
     // security
     csp: `
-        default-src 'self' #{FE};
-        script-src  'self' 'unsafe-inline' #{FE};
-        style-src   'self' 'unsafe-inline' #{FE};
-        img-src     'self' data: #{FE};
-        font-src    'self' #{FE};
-        connect-src 'self' #{FE};
-        frame-src   'self' #{FE};
-        object-src  'none' #{FE};
-        base-uri    'self' #{FE};
-        form-action 'self' #{FE};
+        default-src 'self' {FE};
+        script-src  'self' 'unsafe-inline' {FE};
+        style-src   'self' 'unsafe-inline' {FE};
+        img-src     'self' data: {FE};
+        font-src    'self' {FE};
+        connect-src 'self' {FE};
+        frame-src   'self' {FE};
+        object-src  'none' {FE};
+        base-uri    'self' {FE};
+        form-action 'self' {FE};
     `,
 
     // à injecter via fichier .env ou variables d'environnement
