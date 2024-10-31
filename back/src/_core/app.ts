@@ -91,7 +91,7 @@ function setupCorsAndCsp(app: NestExpressApplication): void {
     getFrontendOrigin(app);
 
     environment.csp = environment.csp
-        .replace(new RegExp('#{FE}', 'g'), environment.frontendOrigin)
+        .replace(new RegExp('{FE}', 'g'), environment.frontendOrigin)
         .replace(/\s+/g, ' ')
         .trim();
 
