@@ -5,7 +5,7 @@ import { getCookieOptions } from 'src/_tools/cookie.helper';
 import { convertTime } from 'src/_tools/time.helper';
 import { environment } from 'src/environment/environment';
 import { BearerToken, BearerTokenPayload, JwtPayload, RefreshTokenPayload, TokenType } from 'src/modules/_shared/entities/token';
-import { UserDTO } from 'src/modules/users/entities/user';
+import { UserDTO } from 'src/modules/users/entities/user.entity';
 
 @Injectable()
 export class JwtTokenService {

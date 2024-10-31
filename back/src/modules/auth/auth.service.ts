@@ -2,8 +2,8 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { createHash } from 'crypto';
 import { Response } from 'express';
 import { JwtTokenService } from 'src/modules/_shared/jwt.service';
-import { UserCredentials } from 'src/modules/auth/entities/credentials';
-import { UserDTO } from 'src/modules/users/entities/user';
+import { UserCredentials } from 'src/modules/auth/entities/credentials.entity';
+import { UserDTO } from 'src/modules/users/entities/user.entity';
 import { UsersService } from 'src/modules/users/users.service';
 
 @Injectable()

@@ -1,4 +1,4 @@
-import { UserDTO } from "src/modules/users/entities/user";
+import { UserDTO } from "src/modules/users/entities/user.entity";
 
 export type BearerToken = {
     access_token: string;
