@@ -2,7 +2,7 @@ import { Body, Controller, Post, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
 import { AuthGuard } from 'src/modules/auth/auth.guard';
 import { AuthService } from 'src/modules/auth/auth.service';
-import { UserCredentials } from 'src/modules/auth/entities/credentials';
+import { UserCredentials } from 'src/modules/auth/entities/credentials.entity';
 
 @Controller('auth')
 export class AuthController {
