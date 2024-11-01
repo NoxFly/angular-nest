@@ -2,7 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { createHash } from 'crypto';
 import { Response } from 'express';
 import { JwtTokenService } from 'src/modules/_shared/services/jwt.service';
-import { UserCredentials } from 'src/modules/auth/entities/credentials.entity';
+import { UserCredentialsDTO } from 'src/modules/auth/dto/credentials.dto';
 import { UsersService } from 'src/modules/users/users.service';
 import { UserDTO } from 'src/modules/users/dto/user.dto';
 
@@ -17,7 +17,7 @@ export class AuthService {
         return createHash('sha256').update(password).digest('hex');
     }
 
-    public async login(credentials: UserCredentials, response: Response): Promise<UserDTO> {
+    public async login(credentials: UserCredentialsDTO, response: Response): Promise<UserDTO> {
         const hash = this.hashPassword(credentials.password);
 
         const user = await this.usersService.findOne(credentials.username);

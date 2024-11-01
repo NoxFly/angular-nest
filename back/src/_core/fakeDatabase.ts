@@ -1,8 +1,8 @@
 import { createHash } from "crypto";
-import { UserModel } from "src/modules/users/entities/user.entity";
+import { UserEntity } from "src/modules/users/entities/user.entity";
 
 export class FakeDatabase {
-    public static readonly users: UserModel[] = [
+    public static readonly users: UserEntity[] = [
         {
             id: '1',
             name: 'admin',

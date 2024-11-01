@@ -1,6 +1,6 @@
 import { HttpException } from "@nestjs/common";
 import { environment } from "src/environment/environment";
-import { RiotEndpoint, RiotErrorResponse, RiotPlatformRegion, RiotRegionContinent } from "src/modules/riot/entities/api/riot.entity";
+import { RiotEndpoint, IRiotErrorResponse, RiotPlatformRegion, RiotRegionContinent } from "src/modules/riot/entities/riot";
 
 /**
  * Classe de base pour chaque service de l'API Riot.
@@ -8,7 +8,7 @@ import { RiotEndpoint, RiotErrorResponse, RiotPlatformRegion, RiotRegionContinen
  * ainsi que des méthodes utilitaires pour formater les URI et faire
  * et gérer des requêtes.
  */
-export class RiotApi {
+export abstract class RiotApi {
     private readonly baseUri = "https://{region}.api.riotgames.com";
 
     private readonly defaultHeaders = {
@@ -69,7 +69,7 @@ export class RiotApi {
         const data = await response.json();
 
         if(!response.ok) {
-            const error = data as RiotErrorResponse;
+            const error = data as IRiotErrorResponse;
             throw new HttpException(error.status.message, error.status.status_code);
         }
 

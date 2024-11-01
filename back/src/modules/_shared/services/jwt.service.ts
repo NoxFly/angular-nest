@@ -4,13 +4,13 @@ import { Response } from 'express';
 import { getCookieOptions } from 'src/_tools/cookie.helper';
 import { convertTime } from 'src/_tools/time.helper';
 import { environment } from 'src/environment/environment';
-import { BearerToken, BearerTokenPayload, JwtPayload, RefreshTokenPayload, TokenType } from 'src/modules/_shared/entities/jwt.entity';
+import { IBearerToken, IBearerTokenPayload, IJwtPayload, IRefreshTokenPayload, TokenType } from 'src/modules/_shared/interfaces/jwt.interfaces';
 
 @Injectable()
 export class JwtTokenService {
     public constructor(private readonly jwtService: JwtService) {}
 
-    public generateBearerToken<T>(response: Response, id: string, payload: T, refreshTokenExp?: number): BearerToken {
+    public generateBearerToken<T>(response: Response, id: string, payload: T, refreshTokenExp?: number): IBearerToken {
         // refreshTokenExp is the expiration time of the refresh token in seconds
         // if refreshTokenExp is provided, then we calculate the time remaining between now and the expiration of the refresh token (in seconds)
         // otherwise, we use the default expiration time for the access token
@@ -36,7 +36,7 @@ export class JwtTokenService {
     }
 
     // Centralise la création d'un refresh token
-    public generateRefreshToken<T>(response: Response, id: string, payload: T, remember: boolean): BearerToken {
+    public generateRefreshToken<T>(response: Response, id: string, payload: T, remember: boolean): IBearerToken {
         const duration = remember
             ? environment.refreshTokenExpiration
             : environment.sessionDuration;
@@ -62,13 +62,13 @@ export class JwtTokenService {
     }
 
     // Vérification du JWT (access token)
-    public verifyAccessToken<T>(token: string, throwOnExpiration: boolean=true): BearerTokenPayload<T> & JwtPayload {
-        return this.verifyToken<BearerTokenPayload<T>>(token, environment.accessTokenSecret, !throwOnExpiration);
+    public verifyAccessToken<T>(token: string, throwOnExpiration: boolean=true): IBearerTokenPayload<T> & IJwtPayload {
+        return this.verifyToken<IBearerTokenPayload<T>>(token, environment.accessTokenSecret, !throwOnExpiration);
     }
 
     // Vérification du JWT (refresh token)
-    public verifyRefreshToken<T>(token: string): RefreshTokenPayload<T> & JwtPayload {
-        return this.verifyToken<RefreshTokenPayload<T>>(token, environment.refreshTokenSecret);
+    public verifyRefreshToken<T>(token: string): IRefreshTokenPayload<T> & IJwtPayload {
+        return this.verifyToken<IRefreshTokenPayload<T>>(token, environment.refreshTokenSecret);
     }
 
     public removeTokens(response: Response): void {
@@ -79,7 +79,7 @@ export class JwtTokenService {
 
     // ----------------------------------------
 
-    private saveAccessToken(token: BearerToken, response: Response): void {
+    private saveAccessToken(token: IBearerToken, response: Response): void {
         const accessTokenExpiration = convertTime(environment.accessTokenExpiration, 'ms');
 
         const options = getCookieOptions(accessTokenExpiration);
@@ -87,7 +87,7 @@ export class JwtTokenService {
         response.cookie(TokenType.bearer, token.access_token, options);
     }
 
-    private saveRefreshToken(token: BearerToken, response: Response, remember: boolean): void {
+    private saveRefreshToken(token: IBearerToken, response: Response, remember: boolean): void {
         const refreshTokenExpiration = remember
             ? convertTime(environment.refreshTokenExpiration, 'ms')
             : undefined;
@@ -100,7 +100,7 @@ export class JwtTokenService {
 
     // ----------------------------------------
 
-    private createToken<T>(payload: BearerTokenPayload<T> | RefreshTokenPayload<T>, secret: string, expiration: string): BearerToken {
+    private createToken<T>(payload: IBearerTokenPayload<T> | IRefreshTokenPayload<T>, secret: string, expiration: string): IBearerToken {
         const access_token = this.jwtService.sign(payload, {
             secret,
             expiresIn: expiration,
@@ -109,7 +109,7 @@ export class JwtTokenService {
         const expiresIn = convertTime(expiration, 's');
         const expiresAt = Date.now() + expiresIn * 1000;
 
-        const bearer: BearerToken = {
+        const bearer: IBearerToken = {
             access_token,
             expiresAt,
             expiresIn,
@@ -118,7 +118,7 @@ export class JwtTokenService {
         return bearer;
     }
 
-    private verifyToken<T extends object>(token: string, secret: string, ignoreExpiration: boolean = false): T & JwtPayload {
-        return this.jwtService.verify<T & JwtPayload>(token, { secret, ignoreExpiration });
+    private verifyToken<T extends object>(token: string, secret: string, ignoreExpiration: boolean = false): T & IJwtPayload {
+        return this.jwtService.verify<T & IJwtPayload>(token, { secret, ignoreExpiration });
     }
 }

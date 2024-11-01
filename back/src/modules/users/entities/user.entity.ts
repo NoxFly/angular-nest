@@ -1,4 +1,4 @@
-export type UserModel = {
+export type UserEntity = {
     id: string;
     name: string;
     password: string;

@@ -1,10 +1,19 @@
 import { Injectable } from "@nestjs/common";
-import { RiotEndpoint, RiotPlatformRegion, RiotRegionContinent } from "src/modules/riot/entities/api/riot.entity";
-import { RiotApiSummonerAccount } from "src/modules/riot/entities/api/riot.lol.entity";
-import { RiotApi } from "src/modules/riot/services/riot.api";
+import { RiotEndpoint, RiotPlatformRegion, RiotRegionContinent } from "src/modules/riot/entities/riot";
+import { RiotApiSummonerAccount, RiotApiSummonerProfile } from "src/modules/riot/league-of-legends/dto/summoner.entity";
+import { RiotApi } from "src/modules/riot/common/riotApi.base";
 
 @Injectable()
-export class RiotApiService extends RiotApi {
+export class RiotLoLApiService extends RiotApi {
+    /**
+     * Retourne le profil d'un joueur Riot à partir de son puuid.
+     */
+    public async getSummonerProfile(region: RiotPlatformRegion, puuid: string): Promise<RiotApiSummonerProfile> {
+        const uri = this.formatUri(RiotEndpoint.summonerLolProfile, { puuid, region });
+        const data = await this.request<RiotApiSummonerProfile>(uri);
+        return data;
+    }
+
     /**
      * Cherche et retourne un compte de joueur Riot à partir de son nom et tag
      * dans une région donnée.

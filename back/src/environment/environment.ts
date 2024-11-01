@@ -9,7 +9,7 @@ export const environment = {
     // uri relative
     frontendOrigin:         "http://localhost:4200", // dev
     backendUriPrefix:       "/be", // le suffixe des requêtes à destination du backend
-    swaggerUriPrefix:       "/api", // le suffixe pour accéder à l'interface de Swagger
+    swaggerUriPrefix:       "/swagger", // le suffixe pour accéder à l'interface de Swagger
 
     // security
     csp: `

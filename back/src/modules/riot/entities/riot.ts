@@ -26,7 +26,7 @@ export enum RiotPlatformRegion {
     BR = "BR1"
 }
 
-export interface RiotErrorResponse {
+export interface IRiotErrorResponse {
     status:  {
         status_code: HttpStatus;
         message: string;

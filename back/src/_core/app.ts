@@ -1,10 +1,10 @@
 import { CorsOptions } from "@nestjs/common/interfaces/external/cors-options.interface";
 import { NestFactory } from "@nestjs/core";
 import { NestExpressApplication } from "@nestjs/platform-express";
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import { join } from "path";
+import { setupSwagger } from "src/_core/swagger";
 import { convertTime } from "src/_tools/time.helper";
 import { AppModule } from "src/app.module";
 import { environment } from "src/environment/environment";
@@ -67,27 +67,6 @@ function setupMiddlewares(app: NestExpressApplication): void {
         app.use(environment.backendUriPrefix, morgan("dev"));
         setupSwagger(app);
     }
-}
-
-function setupSwagger(app: NestExpressApplication): void {
-    const config = new DocumentBuilder()
-        .setTitle('Demo example')
-        .setDescription('The demo API description')
-        .setVersion('1.0')
-        .build();
-
-    const document = SwaggerModule.createDocument(app, config);
-
-    SwaggerModule.setup(
-        environment.backendUriPrefix + environment.swaggerUriPrefix,
-        app,
-        document,
-        {
-            swaggerOptions: {
-                tryItOutEnabled: true,
-            }
-        }
-    );
 }
 
 /**

@@ -12,7 +12,7 @@
     - `middlewares/` contient les différents middlewares qui peuvent être appelés lors d'une requête, suivant le routage de l'application.
     - `modules/` : contient les endpoints de l'application. Voir la section dédiée.
 
-### Modules
+## Modules
 
 Un module est un bloc, modulaire, qui peut potentiellement être remplacé sans affecter le reste de l'application.
 
@@ -21,6 +21,8 @@ Chaque bloc est dédié à un type de ressource / de traitement.
 Le dossier `src/modules/` contient ces blocs. Ce dossier ne doit contenir **que** des sous-dossiers, caractérisants ces blocs.
 
 Un bloc doit avoir un nom significatif de ce à quoi il touche.
+
+Un bloc peut en contenir d'autres (nesting). Cela peut être particulièrement efficace pour du sous-routage, lorsqu'il y a des sous-domaines d'application. Par exemple, concernant l'API de Riot Games, il y a un module concernant les données propres aux comptes Riot, puis autant de sous-domaines que leurs jeux, chacun ayant leur propre types de données et API.
 
 Certaines conventions doivent être respectées :
 
@@ -33,7 +35,11 @@ src/
         |- BLC.service.ts
         |- BLC.controller.ts
 ```
-Si des types sont propres à ce bloc, on les trouvera dans le dossier `src/modules/BLC/entities/`, et seront nommés de la manière suivante : `[nom].entity.ts`.
+Si des types sont propres à ce bloc, on les trouvera dans les dossiers
+- `src/modules/BLC/entities/`,
+- `src/modules/BLC/dto/`,
+- `src/modules/BLC/interfaces/`,
+et seront nommés de la manière suivante : `[nom].[type].ts`, par exemple `credentials.dto.ts`, `user.entity.ts`.
 
 Si le service principal de ce bloc doit être séparé en plusieurs sous-services, on les trouveras dans un dossier `src/modules/BLC/services/`
 
@@ -60,7 +66,7 @@ Le module de se bloc doit :
     export class AppModule {}
     ```
 
-### Nomenclature
+## Nomenclature
 
 Chaque type de fichier dans la liste qui suit doit recevoir un suffixe, ce qui donnera cette forme : `[nomFichier].[suffixe].ts`.
 
@@ -80,3 +86,28 @@ De plus :
 
 - Tout fichier et toute variable sont écrits en `camelCase`.
 - Toute classe est écrite en `PascalCase`.
+
+## Structures de données Entity et DTO
+
+### Entity
+
+- Concerne les fichiers `.entity.ts` dans les dossiers `entities/`
+- Représentent les modèles de données utilisés pour l'application en elle-même
+- Généralement correspondant aux structures de données de la base de données, et des ORM.
+
+### DTO
+
+- Data Transfer Objects
+- Représentent les types de données utilisés dans les requêtes (in et out).
+- Généralement utilisés pour les requêtes, et les réponses, en tant que payload.
+
+
+## Documentation
+
+La documentation technique est maintenue par Swagger de façon automatique, à travers le code.
+
+Des décorateurs sont mis à disposition, et sont utilisés pour
+- décrire les signatures d'actions de contrôleurs
+- décrire les propriétés des DTO afin de comprendre quelles sont les données de requête et de réponse
+
+Ces décorateurs commencent par `@Api`, comme `@ApiParam`, `@ApiBody`, `@ApiOperation` et `@ApiResponse`.

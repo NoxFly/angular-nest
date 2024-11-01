@@ -1,10 +1,11 @@
 import { Body, Controller, Post, Res, UseGuards } from '@nestjs/common';
-import { ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { AuthGuard } from 'src/modules/auth/auth.guard';
 import { AuthService } from 'src/modules/auth/auth.service';
-import { UserCredentials } from 'src/modules/auth/entities/credentials.entity';
+import { UserCredentialsDTO } from 'src/modules/auth/dto/credentials.dto';
 
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
     public constructor(
@@ -14,11 +15,12 @@ export class AuthController {
     /**
      * Authentifie un utilisateur.
      */
-    @Post('login')
+    @ApiOperation({ description: 'Authentifie un utilisateur' })
     @ApiResponse({ status: 201, description: 'User logged in' })
     @ApiResponse({ status: 401, description: 'Wrong username or password' })
     @ApiResponse({ status: 500, description: 'Internal server error' })
-    public async login(@Res() res: Response, @Body() body: UserCredentials): Promise<void> {
+    @Post('login')
+    public async login(@Res() res: Response, @Body() body: UserCredentialsDTO): Promise<void> {
         const user = await this.authService.login(body, res);
         res.json(user);
     }
@@ -26,8 +28,10 @@ export class AuthController {
     /**
      * Déconnecte un utilisateur.
      */
-    @Post('logout')
+    @ApiOperation({ description: 'Déconnecte un utilisateur en supprimant ses cookies' })
     @ApiResponse({ status: 201, description: 'User logged out' })
+    @ApiResponse({ status: 401, description: 'Requested by an unauthenticated user' })
+    @Post('logout')
     public async logout(@Res() res: Response): Promise<void> {
         this.authService.logout(res);
         res.send();
@@ -37,9 +41,10 @@ export class AuthController {
      * Si cette route aboutit sans erreur, l'appelant est authentifié.
      */
     @UseGuards(AuthGuard)
-    @Post('check')
+    @ApiOperation({ description: 'Vérifie si celui qui fait la requête est authentifié' })
     @ApiResponse({ status: 201, description: 'Request is done by an authenticated user' })
     @ApiResponse({ status: 401, description: 'Request is done by an unauthenticated user' })
+    @Post('check')
     public checkToken(): boolean {
         return true;
     }

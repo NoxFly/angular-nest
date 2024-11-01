@@ -1,6 +1,6 @@
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { TokenType } from 'src/modules/_shared/entities/jwt.entity';
+import { TokenType } from 'src/modules/_shared/interfaces/jwt.interfaces';
 import { JwtTokenService } from 'src/modules/_shared/services/jwt.service';
 import { UserDTO } from 'src/modules/users/dto/user.dto';
 

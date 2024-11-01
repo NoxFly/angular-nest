@@ -1,11 +1,11 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsBoolean, IsString } from "class-validator";
 
-export class UserCredentials {
+export class UserCredentialsDTO {
     @ApiProperty({
         required: true,
         description: 'The user login ID',
-        example: 'john.doe@gmail.com',
+        example: 'admin',
         minLength: 3,
         maxLength: 128,
     })
@@ -15,7 +15,7 @@ export class UserCredentials {
     @ApiProperty({
         required: true,
         description: 'The user password',
-        example: '1234',
+        example: 'test',
         minLength: 3,
         maxLength: 128,
     })
