@@ -1,11 +1,14 @@
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { TokenType } from 'src/modules/_shared/entities/token';
-import { JwtTokenService } from 'src/modules/_shared/jwt.service';
+import { TokenType } from 'src/modules/_shared/entities/jwt.entity';
+import { JwtTokenService } from 'src/modules/_shared/services/jwt.service';
+import { UserDTO } from 'src/modules/users/dto/user.dto';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-    public constructor(private readonly jwtService: JwtTokenService) {}
+    public constructor(
+        private readonly jwtService: JwtTokenService,
+    ) {}
 
     public async canActivate(context: ExecutionContext): Promise<boolean> {
         const httpContext = context.switchToHttp();
@@ -24,7 +27,7 @@ export class AuthGuard implements CanActivate {
         }
 
         try {
-            const payload = this.jwtService.verifyAccessToken(token);
+            const payload = this.jwtService.verifyAccessToken<UserDTO>(token);
             request['user'] = payload.user;
             return true;
         }
@@ -68,8 +71,8 @@ export class AuthGuard implements CanActivate {
 
         // si oui, on peut générer un nouvel access token
         try {
-            const payload = this.jwtService.verifyRefreshToken(refreshToken);
-            const newBearer = this.jwtService.generateBearerToken(response, payload.user, payload.exp);
+            const payload = this.jwtService.verifyRefreshToken<UserDTO>(refreshToken);
+            const newBearer = this.jwtService.generateBearerToken(response, payload.user.id, payload.user, payload.exp);
             return newBearer.access_token;
         }
         catch(e) {

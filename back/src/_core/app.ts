@@ -33,7 +33,8 @@ export async function startApp(app: NestExpressApplication): Promise<void> {
  * Créé une nouvelle instance d'application Nest + Express
  */
 function createApp(): Promise<NestExpressApplication> {
-    return NestFactory.create<NestExpressApplication>(AppModule);
+    const app = NestFactory.create<NestExpressApplication>(AppModule);
+    return app;
 }
 
 /**
@@ -80,7 +81,12 @@ function setupSwagger(app: NestExpressApplication): void {
     SwaggerModule.setup(
         environment.backendUriPrefix + environment.swaggerUriPrefix,
         app,
-        document
+        document,
+        {
+            swaggerOptions: {
+                tryItOutEnabled: true,
+            }
+        }
     );
 }
 

@@ -15,11 +15,11 @@ export function publicMiddleware(req: Request, res: Response, next: NextFunction
     try {
         const fileStat = statSync(filePath);
 
-        if (fileStat.isFile()) {
+        if(fileStat.isFile()) {
             return res.sendFile(filePath);
         }
     }
-    catch (err) {
+    catch(err) {
         // File does not exist, continue to serve index.html
     }
 

@@ -7,6 +7,7 @@ export class UsersService {
     public constructor() {}
 
     public async findOne(userId: string): Promise<UserModel | undefined> {
-        return FakeDatabase.users.find(user => user.name === userId);
+        const user = FakeDatabase.users.find(user => user.name === userId);
+        return user;
     }
 }

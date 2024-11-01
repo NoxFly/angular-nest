@@ -4,5 +4,3 @@ export type UserModel = {
     password: string;
     email: string;
 };
-
-export type UserDTO = Omit<UserModel, 'password'>;

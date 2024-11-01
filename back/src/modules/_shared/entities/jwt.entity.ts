@@ -1,29 +1,27 @@
-import { UserDTO } from "src/modules/users/entities/user.entity";
-
-export type BearerToken = {
+export interface BearerToken {
     access_token: string;
     expiresIn: number; // Durée de validité en secondes
     expiresAt: number; // Date d'expiration en millisecondes (timestamp)
-};
+}
 
-export type JwtPayload = {
+export interface JwtPayload {
     iat: number; // Date de création du token en secondes
     exp: number; // Date d'expiration du token en secondes
-};
+}
 
 export enum TokenType {
     bearer = 'bearer_token',
     refresh = 'refresh_token',
 }
 
-export type BearerTokenPayload = {
+export interface BearerTokenPayload<T> {
     sub: string;
     scope?: string;
-    user: UserDTO;
-};
+    user: T;
+}
 
-export type RefreshTokenPayload = {
+export interface RefreshTokenPayload<T> {
     sub: string;
-    user: UserDTO;
+    user: T;
     remember: boolean;
-};
+}
