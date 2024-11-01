@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { RiotEndpoint, RiotPlatformRegion, RiotRegionContinent } from "src/modules/riot/entities/riot";
+import { RiotEndpoint, RiotPlatformRegion, RiotRegionContinent } from "src/modules/riot/entities/riot.entity";
 import { RiotApiSummonerAccount, RiotApiSummonerProfile } from "src/modules/riot/league-of-legends/dto/summoner.entity";
 import { RiotApi } from "src/modules/riot/common/riotApi.base";
 

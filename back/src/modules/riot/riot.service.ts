@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
-import { RiotPlatformRegion } from 'src/modules/riot/entities/riot';
+import { RiotPlatformRegion } from 'src/modules/riot/entities/riot.entity';
 import { RiotLoLApiService } from 'src/modules/riot/league-of-legends/leagueOfLegends.service';
 import { RiotSummonerDTO } from 'src/modules/riot/league-of-legends/dto/summoner.entity';
 

@@ -1,6 +1,6 @@
 import { HttpException } from "@nestjs/common";
 import { environment } from "src/environment/environment";
-import { RiotEndpoint, IRiotErrorResponse, RiotPlatformRegion, RiotRegionContinent } from "src/modules/riot/entities/riot";
+import { RiotEndpoint, IRiotErrorResponse, RiotPlatformRegion, RiotRegionContinent } from "src/modules/riot/entities/riot.entity";
 
 /**
  * Classe de base pour chaque service de l'API Riot.

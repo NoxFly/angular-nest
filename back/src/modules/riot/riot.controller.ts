@@ -1,6 +1,6 @@
 import { ClassSerializerInterceptor, Controller, Get, Param, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { RiotPlatformRegion } from 'src/modules/riot/entities/riot';
+import { RiotPlatformRegion } from 'src/modules/riot/entities/riot.entity';
 import { RiotService } from 'src/modules/riot/riot.service';
 import { AuthGuard } from 'src/modules/auth/auth.guard';
 import { RiotSummonerDTO } from 'src/modules/riot/league-of-legends/dto/summoner.entity';
