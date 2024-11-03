@@ -20,7 +20,9 @@ export class UsersController {
     @ApiResponse({ status: 401, description: 'Unauthorized' })
     @ApiResponse({ status: 404, description: 'User not found' })
     @Get(':id')
-    public getUser(@Param('id') id: string): Promise<UserDTO> {
+    public getUser(
+        @Param('id') id: string
+    ): Promise<UserDTO> {
         const user = this.usersService.findOne(id);
         return user;
     }

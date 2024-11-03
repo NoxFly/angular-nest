@@ -18,12 +18,8 @@ export function setupSwagger(app: NestExpressApplication): void {
     };
 
     const config = new DocumentBuilder()
-        .setTitle("API Documentation")
-        .setDescription("API Documentation description")
-        .setVersion("1.0")
-        .addTag("Auth", "Authentification")
-        .addTag("User", "Utilisateurs")
-        .addTag("Riot", "Riot Games API")
+        .setTitle("Angular/Nest POC API Documentation")
+        .setDescription("no description provided for now")
         .build();
 
     const documentFactory = (): OpenAPIObject => SwaggerModule.createDocument(app, config);

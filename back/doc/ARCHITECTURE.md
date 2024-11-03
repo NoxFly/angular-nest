@@ -84,7 +84,9 @@ Par exemple, pour un guard sur l'authentification : `auth.guard.ts`.
 
 De plus :
 
-- Tout fichier et toute variable sont écrits en `camelCase`.
+- Tout fichier et tout dossier sont écrits en `kebab-case`.
+- Toute variable est écrite en `camelCase`.
+- Tout fichier ou constante écrits en majuscule doivent être en `snake_case`,
 - Toute classe est écrite en `PascalCase`.
 
 ## Structures de données Entity et DTO

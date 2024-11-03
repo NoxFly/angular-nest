@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { FakeDatabase } from 'src/_core/fakeDatabase';
+import { FakeDatabase } from 'src/_core/fake-database';
 import { UserEntity } from 'src/modules/users/entities/user.entity';
 
 @Injectable()
