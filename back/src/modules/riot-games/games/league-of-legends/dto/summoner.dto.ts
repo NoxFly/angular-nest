@@ -6,11 +6,3 @@ export interface ILoLApiSummonerProfileResponse {
     revisionDate: number;
     summonerLevel: number;
 }
-
-
-export interface ILoLSummonerDTO {
-    uuid: string; // uuid interne à l'application
-
-    profileIconUrl: string;
-    summonerLevel: number;
-}

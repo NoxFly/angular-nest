@@ -33,6 +33,7 @@ export const environment = {
     sessionDuration:        "#{SESSION_DURATION}",
     requestLogLevel:        "#{REQUEST_LOG_LEVEL}",
     appPort:                "#{APP_PORT}",
+    mongodbUri:             "#{MONGODB_URI}",
     riotApiKey:             "#{RIOT_API_KEY}",
 };
 

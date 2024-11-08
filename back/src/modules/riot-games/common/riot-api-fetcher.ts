@@ -44,6 +44,7 @@ export abstract class RiotApiFetcher {
 
         if(!response.ok) {
             const error = data as IRiotErrorResponse;
+            console.error("Failed to request Riot API :", error);
             throw new HttpException(error.status.message, error.status.status_code);
         }
 

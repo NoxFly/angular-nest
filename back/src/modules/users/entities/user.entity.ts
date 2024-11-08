@@ -1,6 +1,6 @@
-export type UserEntity = {
+export interface UserEntity {
     id: string;
     name: string;
     password: string;
     email: string;
-};
+}

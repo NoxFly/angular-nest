@@ -1,33 +1,65 @@
-import { Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable } from "@nestjs/common";
+import { InjectModel } from "@nestjs/mongoose";
+import { Model } from "mongoose";
 import { RiotPlatformRegion } from "src/modules/riot-games/api/constants/regions";
 import { LoLApiVersions } from "src/modules/riot-games/api/constants/riot-api-versions";
 import { RiotEndpoint } from "src/modules/riot-games/api/enums/riot-api-endpoints";
 import { RiotApiFetcher } from "src/modules/riot-games/common/riot-api-fetcher";
-import { RiotAssetsProvider } from "src/modules/riot-games/common/riot-assets.provider";
-import { ILoLApiSummonerProfileResponse, ILoLSummonerDTO } from "src/modules/riot-games/games/league-of-legends/dto/summoner.dto";
+import { ILoLApiSummonerProfileResponse } from "src/modules/riot-games/games/league-of-legends/dto/summoner.dto";
+import { Summoner } from "src/modules/riot-games/schemas/summoner.schema";
+import { RiotAccount } from "src/modules/riot-games/schemas/riot-account.schema";
 
 @Injectable()
 export class LeagueOfLegendsService extends RiotApiFetcher {
-    private readonly assetsProvider: RiotAssetsProvider = new RiotAssetsProvider();
+    public constructor(
+        @InjectModel(Summoner.name) private readonly summonerModel: Model<Summoner>,
+        @InjectModel(RiotAccount.name) private readonly riotAccountModel: Model<RiotAccount>,
+    ) {
+        super();
+    }
 
     /**
      * Retourne le profil d'un joueur Riot à partir de son puuid.
      */
-    public async getSummonerProfile(region: RiotPlatformRegion, uuid: string): Promise<ILoLSummonerDTO> {
-        const puuid = uuid; // à enlever quand la base locale sera implémentée
+    public async getSummonerProfile(region: RiotPlatformRegion, uuid: string, forceRefresh=false): Promise<Summoner> {
+        // 1. Recherche profile existant
+        const savedProfile = await this.summonerModel.findOne({ uuid }).lean().select('-_id');
 
-        const profile = await this.request<ILoLApiSummonerProfileResponse>(RiotEndpoint.summonerLolProfile, {
+        // existe et pas de rafraîchissement forcé
+        if(savedProfile && !forceRefresh) {
+            return new Summoner({ ...savedProfile });
+        }
+
+        // 2. Recherche du compte Riot en local
+        const account = await this.riotAccountModel.findOne({ uuid }).lean().select('-_id');
+
+        // 2.a Si le compte n'existe pas, throw une erreur
+        if(!account) {
+            // TODO : load le compte à la place de throw une erreur
+            throw new BadRequestException("Account not registered yet");
+        }
+
+        // 3. Recherche du profile du joueur
+        const summoner = await this.request<ILoLApiSummonerProfileResponse>(RiotEndpoint.summonerLolProfile, {
             version: LoLApiVersions.summonerProfile,
             region,
-            puuid,
+            puuid: account.puuid,
         });
 
-        const summonerProfile: ILoLSummonerDTO = {
+        // 4. Création ou mise à jour du profile
+        const profile = new Summoner({
             uuid,
-            profileIconUrl: this.assetsProvider.getProfileIconUri(profile.profileIconId),
-            summonerLevel: profile.summonerLevel,
-        };
+            profileIconId: summoner.profileIconId,
+            level: summoner.summonerLevel,
+        });
 
-        return summonerProfile;
+        if(savedProfile) {
+            await this.summonerModel.updateOne({ uuid }, profile);
+        }
+        else {
+            await this.summonerModel.create(profile);
+        }
+
+        return profile;
     }
 }

@@ -2,8 +2,8 @@ import { ClassSerializerInterceptor, Controller, Get, Query, UseGuards, UseInter
 import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from 'src/modules/auth/auth.guard';
 import { RiotPlatformRegion } from 'src/modules/riot-games/api/constants/regions';
-import { IRiotAccount } from 'src/modules/riot-games/dto/riot.dto';
 import { RiotService } from 'src/modules/riot-games/riot-games.service';
+import { RiotAccount } from 'src/modules/riot-games/schemas/riot-account.schema';
 
 @ApiTags('Riot')
 @Controller('riot')
@@ -26,12 +26,12 @@ export class RiotController {
     @ApiResponse({ status: 404, description: 'Compte introuvable' })
     @UseInterceptors(ClassSerializerInterceptor)
     @Get('search')
-    public async searchSummoner(
+    public async searchPlayer(
         @Query('region') region: RiotPlatformRegion,
         @Query('name') name: string,
         @Query('tag') tag: string
-    ): Promise<IRiotAccount> {
-        const account = await this.riotService.fetchSummonerByName(region, name, tag);
+    ): Promise<RiotAccount> {
+        const account = await this.riotService.fetchPlayerByName(region, name, tag);
         return account;
     }
 }

@@ -91,9 +91,10 @@ De plus :
 
 ## Structures de données Entity et DTO
 
-### Entity
+### Entity, Schema
 
 - Concerne les fichiers `.entity.ts` dans les dossiers `entities/`
+- Concerne les fichiers `.schema.ts` dans les dossiers `schemas/`
 - Représentent les modèles de données utilisés pour l'application en elle-même
 - Généralement correspondant aux structures de données de la base de données, et des ORM.
 

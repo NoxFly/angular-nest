@@ -2,8 +2,8 @@ import { ClassSerializerInterceptor, Controller, Get, Query, UseGuards, UseInter
 import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { AuthGuard } from "src/modules/auth/auth.guard";
 import { RiotPlatformRegion } from "src/modules/riot-games/api/constants/regions";
-import { ILoLSummonerDTO } from "src/modules/riot-games/games/league-of-legends/dto/summoner.dto";
 import { LeagueOfLegendsService } from "src/modules/riot-games/games/league-of-legends/league-of-legends.service";
+import { Summoner } from "src/modules/riot-games/schemas/summoner.schema";
 
 @ApiTags('Riot', 'League of Legends')
 @Controller('lol')
@@ -29,7 +29,7 @@ export class LeagueOfLegendsController {
     public async searchSummoner(
         @Query('region') region: RiotPlatformRegion,
         @Query('uuid') uuid: string,
-    ): Promise<ILoLSummonerDTO> {
+    ): Promise<Summoner> {
         const summoner = await this.lolService.getSummonerProfile(region, uuid);
         return summoner;
     }

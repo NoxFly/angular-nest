@@ -8,7 +8,7 @@ import { ddragonBaseUri, ddragonEndpoint } from "src/modules/riot-games/api/enum
  * Utilise DDRAGON, CCDRAGON, ...
  */
 export class RiotAssetsProvider {
-    public getProfileIconUri(iconId: number): string {
+    public static getProfileIconUri(iconId: number): string {
         return formatUri(`${ddragonBaseUri}/${ddragonEndpoint.profileicon}`, {
             version: lolCurrentVersion,
             iconId: `${iconId}`,
