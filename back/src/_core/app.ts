@@ -10,6 +10,7 @@ import { convertTime } from "src/_tools/time.helper";
 import { AppModule } from "src/app.module";
 import { environment } from "src/environment/environment";
 import { publicMiddleware } from "src/middlewares/public.middleware";
+import { Server as HttpServer } from 'http';
 
 
 export async function setup(): Promise<NestExpressApplication> {
@@ -24,7 +25,22 @@ export async function setup(): Promise<NestExpressApplication> {
 }
 
 export async function startApp(app: NestExpressApplication): Promise<void> {
-    await app.listen(environment.appPort);
+    const server = await app.listen(environment.appPort);
+
+    const addr = server.address();
+    let uri: string;
+
+    if(typeof addr === 'string') {
+        uri = addr;
+    }
+    else {
+        const scheme = server instanceof HttpServer ? 'http' : 'https';
+        const host = (addr.address === "::") ? 'localhost' : addr.address;
+        const port = addr.port;
+        uri = `${scheme}://${host}:${port}`;
+    }
+
+    console.info(`Server is running on ${uri}`);
 }
 
 
@@ -34,7 +50,10 @@ export async function startApp(app: NestExpressApplication): Promise<void> {
  * Créé une nouvelle instance d'application Nest + Express
  */
 function createApp(): Promise<NestExpressApplication> {
-    const app = NestFactory.create<NestExpressApplication>(AppModule);
+    const app = NestFactory.create<NestExpressApplication>(AppModule, {
+        logger: environment.production ? false : undefined,
+        forceCloseConnections: environment.production,
+    });
     return app;
 }
 
