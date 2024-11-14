@@ -1,3 +1,4 @@
+import { ValidationPipe } from "@nestjs/common";
 import { CorsOptions } from "@nestjs/common/interfaces/external/cors-options.interface";
 import { NestFactory } from "@nestjs/core";
 import { NestExpressApplication } from "@nestjs/platform-express";
@@ -44,6 +45,11 @@ function createApp(): Promise<NestExpressApplication> {
 function configureApp(app: NestExpressApplication): void {
     app.setGlobalPrefix(environment.backendUriPrefix.substring(1));
     app.getHttpAdapter().getInstance().disable('x-powered-by');
+    app.useGlobalPipes(new ValidationPipe({
+        transform: true,
+        whitelist: true,
+        disableErrorMessages: environment.production,
+    }));
 }
 
 /**
