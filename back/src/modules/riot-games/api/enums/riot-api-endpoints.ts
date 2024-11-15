@@ -18,6 +18,9 @@ export enum RiotEndpoint {
 
     championRotation = "/lol/platform/v{version}/champion-rotations",
 
+    // Valorant
+    valorantProfile = "/val/profile/v{version}/players/{puuid}",
+
     // autres jeux...
 }
 

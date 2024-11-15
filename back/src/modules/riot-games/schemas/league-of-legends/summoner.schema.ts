@@ -3,10 +3,10 @@ import { Transform } from "class-transformer";
 import { HydratedDocument } from "mongoose";
 import { RiotAssetsProvider } from "src/modules/riot-games/common/riot-assets.provider";
 
-export type SummonerDocument = HydratedDocument<Summoner>;
+export type LoLSummonerDocument = HydratedDocument<LoLSummoner>;
 
 @Schema({ versionKey: false })
-export class Summoner {
+export class LoLSummoner {
     @Prop()
     public uuid: string;
 
@@ -18,9 +18,9 @@ export class Summoner {
     public level: number;
 
 
-    public constructor(data: Partial<Summoner>) {
+    public constructor(data: Partial<LoLSummoner>) {
         Object.assign(this, data);
     }
 }
 
-export const SummonerSchema = SchemaFactory.createForClass(Summoner);
+export const LoLSummonerSchema = SchemaFactory.createForClass(LoLSummoner);

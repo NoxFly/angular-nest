@@ -2,17 +2,16 @@ import { BadRequestException, Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { RiotPlatformRegion } from "src/modules/riot-games/api/constants/regions";
-import { LoLApiVersions } from "src/modules/riot-games/api/constants/riot-api-versions";
 import { RiotEndpoint } from "src/modules/riot-games/api/enums/riot-api-endpoints";
 import { RiotApiFetcher } from "src/modules/riot-games/common/riot-api-fetcher";
-import { ILoLApiSummonerProfileResponse } from "src/modules/riot-games/games/league-of-legends/dto/lol-summoner.dto";
-import { LoLSummoner } from "src/modules/riot-games/schemas/league-of-legends/summoner.schema";
+import { IValorantApiProfileResponse } from "src/modules/riot-games/games/valorant/dto/val-profile.dto";
 import { RiotAccount } from "src/modules/riot-games/schemas/riot-account.schema";
+import { ValorantProfile } from "src/modules/riot-games/schemas/valorant/profile.schema";
 
 @Injectable()
-export class LeagueOfLegendsService extends RiotApiFetcher {
+export class ValorantService extends RiotApiFetcher {
     public constructor(
-        @InjectModel(LoLSummoner.name) private readonly summonerModel: Model<LoLSummoner>,
+        @InjectModel(ValorantProfile.name) private readonly valorantProfileModel: Model<ValorantProfile>,
         @InjectModel(RiotAccount.name) private readonly riotAccountModel: Model<RiotAccount>,
     ) {
         super();
@@ -21,13 +20,13 @@ export class LeagueOfLegendsService extends RiotApiFetcher {
     /**
      * Retourne le profil d'un joueur Riot à partir de son puuid.
      */
-    public async getSummonerProfile(region: RiotPlatformRegion, uuid: string, forceRefresh=false): Promise<LoLSummoner> {
+    public async getPlayerProfile(region: RiotPlatformRegion, uuid: string, forceRefresh=false): Promise<ValorantProfile> {
         // 1. Recherche profile existant
-        const savedProfile = await this.summonerModel.findOne({ uuid }).lean().select('-_id');
+        const savedProfile = await this.valorantProfileModel.findOne({ uuid }).lean().select('-_id');
 
         // existe et pas de rafraîchissement forcé
         if(savedProfile && !forceRefresh) {
-            return new LoLSummoner({ ...savedProfile });
+            return new ValorantProfile({ ...savedProfile });
         }
 
         // 2. Recherche du compte Riot en local
@@ -40,24 +39,22 @@ export class LeagueOfLegendsService extends RiotApiFetcher {
         }
 
         // 3. Recherche du profile du joueur
-        const summoner = await this.request<ILoLApiSummonerProfileResponse>(RiotEndpoint.summonerLolProfile, {
-            version: LoLApiVersions.summonerProfile,
+        const player = await this.request<IValorantApiProfileResponse>(RiotEndpoint.valorantProfile, {
+            version: '1',
             region,
             puuid: account.puuid,
         });
 
         // 4. Création ou mise à jour du profile
-        const profile = new LoLSummoner({
+        const profile = new ValorantProfile({
             uuid,
-            profileIconId: summoner.profileIconId,
-            level: summoner.summonerLevel,
         });
 
         if(savedProfile) {
-            await this.summonerModel.updateOne({ uuid }, profile);
+            await this.valorantProfileModel.updateOne({ uuid }, profile);
         }
         else {
-            await this.summonerModel.create(profile);
+            await this.valorantProfileModel.create(profile);
         }
 
         return profile;

@@ -11,7 +11,6 @@ export const LoLApiVersions = {
     summonerLiveGame: '5',
     summonerChallenges: '1',
     championsRotation: '3',
-
 };
 
 // idem, LoL
