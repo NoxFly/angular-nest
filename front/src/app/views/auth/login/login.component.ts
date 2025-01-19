@@ -6,7 +6,7 @@ import { catchError, finalize, tap, throwError } from 'rxjs';
 import { Credentials } from 'src/app/core/models/api.type';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { SubscriptionManager } from 'src/app/shared/directives/subscription-manager.directive';
-import { SpinnerComponent } from "../../../shared/components/spinner/spinner.component";
+import { SpinnerComponent } from "src/app/shared/components/spinner/spinner.component";
 
 @Component({
     standalone: true,
