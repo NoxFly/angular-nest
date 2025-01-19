@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngxs/store';
-import { BehaviorSubject, catchError, forkJoin, from, map, Observable, of, switchMap, tap, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, forkJoin, from, map, Observable, of, switchMap } from 'rxjs';
 import { Credentials } from 'src/app/core/models/api.type';
 import { Maybe } from 'src/app/core/models/misc.type';
 import { User } from 'src/app/core/models/user.type';
 import { ApiService } from 'src/app/core/services/api.service';
 import { RemoveUser, SetUser } from 'src/app/core/states/user.action';
 import { UserState } from 'src/app/core/states/user.state';
+import { encryptRSA } from 'src/app/shared/helpers/encryption';
 
 
 @Injectable({
@@ -54,7 +55,8 @@ export class AuthService {
         const cachedUser = this.store.selectSnapshot(UserState.user);
 
         if(!cachedUser) {
-            return this.logout$();
+            this.loginState.next(false);
+            return of(undefined);
         }
 
         return this.api.post$('auth/verify').pipe(
@@ -69,6 +71,8 @@ export class AuthService {
     }
 
     public login$(credentials: Credentials): Observable<void> {
+        credentials.password = encryptRSA(credentials.password);
+
         return of(credentials).pipe(
             switchMap(creds => this.api.post$<User>('auth/login', creds)),
             switchMap(user => this.store.dispatch(new SetUser(user))),
