@@ -1,6 +1,6 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { Response } from 'express';
-import { hashPasswordSHA } from 'src/_core/helpers/crypto.helper';
+import { decryptRSA, hashPasswordSHA } from 'src/_core/helpers/crypto.helper';
 import { JwtTokenService } from 'src/modules/_shared/services/jwt.service';
 import { UserCredentialsDTO } from 'src/modules/auth/dto/credentials.dto';
 import { UserDTO } from 'src/modules/users/dto/user.dto';
@@ -17,6 +17,13 @@ export class AuthService {
      * 
      */
     public async login(credentials: UserCredentialsDTO, response: Response): Promise<UserDTO> {
+        try {
+            credentials.password = decryptRSA(credentials.password);
+        }
+        catch(e) {
+            throw new BadRequestException("Invalid credentials");
+        }
+
         const hash = hashPasswordSHA(credentials.password);
 
         const user = await this.usersService.findOne(credentials.username);
