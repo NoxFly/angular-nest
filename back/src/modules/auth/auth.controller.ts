@@ -16,11 +16,14 @@ export class AuthController {
      * Authentifie un utilisateur.
      */
     @ApiOperation({ description: 'Authentifie un utilisateur' })
-    @ApiResponse({ status: 201, description: 'User logged in' })
+    @ApiResponse({ status: 200, description: 'User logged in' })
     @ApiResponse({ status: 401, description: 'Wrong username or password' })
     @ApiResponse({ status: 500, description: 'Internal server error' })
     @Post('login')
-    public async login(@Res() res: Response, @Body() body: UserCredentialsDTO): Promise<void> {
+    public async login(
+        @Res() res: Response,
+        @Body() body: UserCredentialsDTO
+    ): Promise<void> {
         const user = await this.authService.login(body, res);
         res.json(user);
     }
@@ -29,10 +32,12 @@ export class AuthController {
      * Déconnecte un utilisateur.
      */
     @ApiOperation({ description: 'Déconnecte un utilisateur en supprimant ses cookies' })
-    @ApiResponse({ status: 201, description: 'User logged out' })
+    @ApiResponse({ status: 204, description: 'User logged out' })
     @ApiResponse({ status: 401, description: 'Requested by an unauthenticated user' })
     @Post('logout')
-    public async logout(@Res() res: Response): Promise<void> {
+    public async logout(
+        @Res() res: Response
+    ): Promise<void> {
         this.authService.logout(res);
         res.send();
     }
@@ -42,10 +47,8 @@ export class AuthController {
      */
     @UseGuards(AuthGuard)
     @ApiOperation({ description: 'Vérifie si celui qui fait la requête est authentifié' })
-    @ApiResponse({ status: 201, description: 'Request is done by an authenticated user' })
+    @ApiResponse({ status: 204, description: 'Request is done by an authenticated user' })
     @ApiResponse({ status: 401, description: 'Request is done by an unauthenticated user' })
-    @Post('check')
-    public checkToken(): boolean {
-        return true;
-    }
+    @Post('verify')
+    public checkToken(): void {}
 }

@@ -2,11 +2,11 @@ import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@a
 import { SpinnerComponent } from 'src/app/shared/components/spinner/spinner.component';
 
 @Component({
-    selector: 'app-loading-screen',
     standalone: true,
-    imports: [SpinnerComponent],
+    selector: 'app-loading-screen',
     templateUrl: './loading-screen.component.html',
     styleUrl: './loading-screen.component.scss',
+    imports: [SpinnerComponent],
     changeDetection: ChangeDetectionStrategy.OnPush,
     encapsulation: ViewEncapsulation.ShadowDom,
 })

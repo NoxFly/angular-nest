@@ -1,8 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import { catchError, Observable, of } from 'rxjs';
-import { Credentials } from 'src/app/core/models/api.type';
-import { User } from 'src/app/core/models/user.type';
+import { Observable } from 'rxjs';
+import { Query } from 'src/app/core/models/api.type';
 
 @Injectable({
     providedIn: 'root'
@@ -13,29 +12,23 @@ export class ApiService {
         @Inject('BACKEND_URL') private readonly backendUrl: string,
     ) {}
 
-    // Authentification
-
-    /**
-     * Demande au backend de vérifier les credentials et de stocker les tokens
-     * dans les cookies.
-     */
-    public login$(credentials: Credentials): Observable<User> {
-        return this.http.post<User>(`${this.backendUrl}/auth/login`, credentials);
+    public get$<T>(url: string, query?: Query): Observable<T> {
+        return this.http.get<T>(this.backendUrl + url, { params: query });
     }
 
-    /**
-     * Demande au backend de supprimer les cookies de bearer/refresh
-     */
-    public logout$(): Observable<void> {
-        return this.http.post<void>(`${this.backendUrl}/auth/logout`, null);
+    public post$<T>(url: string, body?: unknown, query?: Query): Observable<T> {
+        return this.http.post<T>(this.backendUrl + url, body, { params: query });
     }
 
-    /**
-     * Le serveur web renvoie `true` si l'utilisateur est connecté, sinon throw.
-     */
-    public check$(): Observable<boolean> {
-        return this.http.post<boolean>(`${this.backendUrl}/auth/check`, null).pipe(
-            catchError(() => of(false))
-        );
+    public put$<T>(url: string, body?: unknown, query?: Query): Observable<T> {
+        return this.http.put<T>(this.backendUrl + url, body, { params: query });
+    }
+
+    public patch$<T>(url: string, body?: unknown, query?: Query): Observable<T> {
+        return this.http.patch<T>(this.backendUrl + url, body, { params: query });
+    }
+
+    public delete$<T>(url: string): Observable<T> {
+        return this.http.delete<T>(this.backendUrl + url);
     }
 }

@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
-import { AuthGuard } from 'src/app/guards/auth.guard';
-import { GuestGuard } from 'src/app/guards/guest.guard';
+import { AuthGuard } from 'src/app/core/guards/Auth.guard';
+import { GuestGuard } from 'src/app/core/guards/Guest.guard';
 
 export const routes: Routes = [
     {
@@ -23,4 +23,9 @@ export const routes: Routes = [
         canActivate: [AuthGuard],
         loadComponent: () => import('src/app/views/auth/logout/logout.component').then(m => m.LogoutComponent)
     },
+    {
+        path: "**",
+        pathMatch: "full",
+        loadComponent: () => import("./views/errors/e404/e404.component").then(m => m.E404Component),
+    }
 ];

@@ -8,7 +8,6 @@ export const environment = {
 
     // uri relative
     frontendOrigin:         "http://localhost:4200", // dev
-    backendUriPrefix:       "/be", // le suffixe des requêtes à destination du backend
     swaggerUriPrefix:       "/swagger", // le suffixe pour accéder à l'interface de Swagger
 
     // security
@@ -33,7 +32,7 @@ export const environment = {
     sessionDuration:        "#{SESSION_DURATION}",
     requestLogLevel:        "#{REQUEST_LOG_LEVEL}",
     appPort:                "#{APP_PORT}",
-    mongodbUri:             "#{MONGODB_URI}",
-    riotApiKey:             "#{RIOT_API_KEY}",
+    rsaPublicKey:           "#{RSA_PUBLIC_KEY}",
+    rsaPrivateKey:          "#{RSA_PRIVATE_KEY}",
 };
 

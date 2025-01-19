@@ -1,44 +1,35 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { Router, RouterOutlet } from '@angular/router';
-import { filter, map, tap } from 'rxjs';
+import { RouterOutlet } from '@angular/router';
+import { tap } from 'rxjs';
 import { AuthService } from 'src/app/core/services/auth.service';
-import { SubscriptionManager } from 'src/app/core/tools/subscription-manager.directive';
 import { LoadingScreenComponent } from 'src/app/shared/components/loading-screen/loading-screen.component';
+import { SubscriptionManager } from 'src/app/shared/directives/subscription-manager.directive';
 
 @Component({
-    selector: 'app-root',
     standalone: true,
-    imports: [CommonModule, RouterOutlet, LoadingScreenComponent],
+    selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrl: './app.component.scss',
+    imports: [CommonModule, RouterOutlet, LoadingScreenComponent],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent extends SubscriptionManager implements OnInit {
-    public isLoading: boolean = true;
+    public ready: boolean = false;
 
     public constructor(
         private readonly auth: AuthService,
-        private readonly router: Router,
         private readonly cdr: ChangeDetectorRef,
     ) {
         super();
     }
 
     public ngOnInit(): void {
-        this.watch$ = this.auth.isAuthenticated$().pipe(
-            map((isLoggedIn) => isLoggedIn ? '/dashboard/home' : '/auth/login'),
-            filter((url) => url !== this.router.url),
-            tap((url) => {
-                this.router.navigateByUrl(url);
-            })
-        );
-
         this.watch$ = this.auth.restore$().pipe(
-            tap(() => {
-                this.isLoading = false;
-                this.cdr.detectChanges();
-            })
+            tap(() => setTimeout(() => {
+                this.ready = true;
+                this.cdr.markForCheck();
+            }, 500))
         );
     }
 }

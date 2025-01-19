@@ -8,6 +8,12 @@ export class FakeDatabase {
             name: 'admin',
             password: createHash('sha256').update('test').digest('hex'),
             email: 'admin@gmail.com',
+        },
+        {
+            id: '2',
+            name: 'noxfly',
+            password: createHash('sha256').update('123').digest('hex'),
+            email: 'nox.fly@gmail.com',
         }
     ];
 }

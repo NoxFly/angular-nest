@@ -9,6 +9,7 @@
                 "@schematics/angular:component": {
                     "style": "scss",
                     "skipTests": true,
+                    "standalone": true,
                     "changeDetection": "OnPush"
                 },
                 "@schematics/angular:class": {
@@ -24,6 +25,7 @@
                     "skipTests": true
                 },
                 "@schematics/angular:pipe": {
+                    "standalone": true,
                     "skipTests": true
                 },
                 "@schematics/angular:resolver": {

@@ -7,14 +7,20 @@ import { environment } from "src/environment/environment";
  * Configure les pages qui sont listées ci-dessus.
  */
 export function setupSwagger(app: NestExpressApplication): void {
-    const swaggerBaseUri = environment.backendUriPrefix + environment.swaggerUriPrefix;
+    const swaggerBaseUri = environment.swaggerUriPrefix;
 
     const swaggerOptions: SwaggerCustomOptions = {
-        swaggerOptions: {
-            tryItOutEnabled: true,
-        },
         swaggerUrl: swaggerBaseUri,
         customSiteTitle: 'API Documentation',
+        swaggerUiEnabled: !environment.production,
+        swaggerOptions: {
+            tryItOutEnabled: true,
+            requestInterceptor: (req) => {
+                req.headers['Content-Type'] = 'application/json';
+                req.headers['Accept'] = 'application/json';
+                return req;
+            },
+        },
     };
 
     const config = new DocumentBuilder()

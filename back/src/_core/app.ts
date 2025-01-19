@@ -3,16 +3,18 @@ import { CorsOptions } from "@nestjs/common/interfaces/external/cors-options.int
 import { NestFactory } from "@nestjs/core";
 import { NestExpressApplication } from "@nestjs/platform-express";
 import cookieParser from 'cookie-parser';
+import { Server as HttpServer } from 'http';
 import morgan from 'morgan';
 import { join } from "path";
 import { setupSwagger } from "src/_core/swagger";
 import { convertTime } from "src/_tools/time.helper";
 import { AppModule } from "src/app.module";
 import { environment } from "src/environment/environment";
-import { publicMiddleware } from "src/middlewares/public.middleware";
-import { Server as HttpServer } from 'http';
 
 
+/**
+ * 
+ */
 export async function setup(): Promise<NestExpressApplication> {
     const app = await createApp();
 
@@ -24,6 +26,9 @@ export async function setup(): Promise<NestExpressApplication> {
     return app;
 }
 
+/**
+ * 
+ */
 export async function startApp(app: NestExpressApplication): Promise<void> {
     const server = await app.listen(environment.appPort);
 
@@ -62,7 +67,6 @@ function createApp(): Promise<NestExpressApplication> {
  * + le côté sécurité (cors + csp)
  */
 function configureApp(app: NestExpressApplication): void {
-    app.setGlobalPrefix(environment.backendUriPrefix.substring(1));
     app.getHttpAdapter().getInstance().disable('x-powered-by');
     app.useGlobalPipes(new ValidationPipe({
         transform: true,
@@ -85,13 +89,12 @@ function setupMiddlewares(app: NestExpressApplication): void {
         path: '/',
     };
 
-    app.use(cookieParser(cookieSecret, cookieOptions));
-    app.use(publicMiddleware);
-
     if(!environment.production) {
-        app.use(environment.backendUriPrefix, morgan("dev"));
+        app.use(morgan("dev"));
         setupSwagger(app);
     }
+
+    app.use(cookieParser(cookieSecret, cookieOptions));
 }
 
 /**
@@ -145,6 +148,9 @@ function getWebserverOrigin(app: NestExpressApplication): string {
     return origin;
 }
 
+/**
+ * 
+ */
 function getFrontendOrigin(app: NestExpressApplication): string {
     if(environment.production) {
         environment.frontendOrigin = getWebserverOrigin(app);

@@ -1,15 +1,16 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { AcceptHeaderMiddleware } from 'src/middlewares/requests.middleware';
 import { AuthModule } from 'src/modules/auth/auth.module';
-import { RiotModule } from 'src/modules/riot-games/riot-games.module';
 import { UsersModule } from 'src/modules/users/users.module';
 
 @Module({
     imports: [
         AuthModule,
         UsersModule,
-        RiotModule,
     ],
 })
-export class AppModule {
-
+export class AppModule implements NestModule {
+    public configure(consumer: MiddlewareConsumer): void {
+        consumer.apply(AcceptHeaderMiddleware).forRoutes('*');
+    }
 }

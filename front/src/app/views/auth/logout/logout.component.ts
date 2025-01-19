@@ -2,14 +2,14 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { tap } from 'rxjs';
 import { AuthService } from 'src/app/core/services/auth.service';
-import { SubscriptionManager } from 'src/app/core/tools/subscription-manager.directive';
+import { SubscriptionManager } from 'src/app/shared/directives/subscription-manager.directive';
 
 @Component({
-    selector: 'app-logout',
     standalone: true,
-    imports: [],
+    selector: 'app-logout',
     templateUrl: './logout.component.html',
     styleUrl: './logout.component.scss',
+    imports: [],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LogoutComponent extends SubscriptionManager implements OnInit {

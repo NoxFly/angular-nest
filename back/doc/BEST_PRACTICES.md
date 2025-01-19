@@ -29,6 +29,9 @@ function b() {
 async function b() {
     const tmp = await a();
     return tmp;
+
+    // ou
+    return await a();
 }
 ```
 
