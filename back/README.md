@@ -29,3 +29,11 @@ Extensions recommandées pour le développement :
 - ESLint (par Microsoft)
 - JavaScript and TypeScript Nightly (par Microsoft)
 - LintLens - ESLint rules made easier (par Gabriel McAdams) - Si édition des fichiers eslint et tsconfig
+
+## POC
+
+Le poc se porte sur l'univers de Riot Games et l'utilisation de son API. Cela permet de faire un exemple légèrement complexe mais compréhensible, et complet.
+
+> **Les clés et autres données sensibles de configuration doivent rester dans le fichier `.env` à la racine du projet, qui est ignoré par git.**
+
+Voir [l'architecture à respecter](./doc/ARCHITECTURE.md) ainsi que les [les bonnes pratiques](./doc/GOOD_PRACTICES.md).

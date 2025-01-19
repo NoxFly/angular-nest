@@ -1,15 +1,15 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
-import { UsersModule } from 'src/modules/users/users.module';
-import { SharedModule } from 'src/modules/_shared/shared.module';
 import { environment } from 'src/environment/environment';
+import { SharedModule } from 'src/modules/_shared/shared.module';
 import { AuthController } from 'src/modules/auth/auth.controller';
 import { AuthService } from 'src/modules/auth/auth.service';
+import { UsersModule } from 'src/modules/users/users.module';
 
 @Module({
     imports: [
-        UsersModule,
         SharedModule,
+        UsersModule,
         JwtModule.register({
             global: true,
             secret: environment.accessTokenSecret,
@@ -20,6 +20,5 @@ import { AuthService } from 'src/modules/auth/auth.service';
     ],
     controllers: [AuthController],
     providers: [AuthService],
-    exports: [AuthService],
 })
 export class AuthModule {}

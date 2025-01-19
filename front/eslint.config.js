@@ -1,4 +1,4 @@
-// @ts-check
+// @ts-nocheck
 const eslint = require("@eslint/js");
 const tseslint = require("typescript-eslint");
 const angular = require("angular-eslint");
@@ -26,6 +26,15 @@ module.exports = tseslint.config(
             "@stylistic": stylistic,
         },
         rules: {
+            "@angular-eslint/component-class-suffix": [
+                "error",
+                {
+                    "suffixes": [
+                        "Page",
+                        "Component"
+                    ]
+                }
+            ],
             "@angular-eslint/directive-selector": [
                 "error",
                 {
@@ -42,8 +51,26 @@ module.exports = tseslint.config(
                     style: "kebab-case",
                 },
             ],
+            "@angular-eslint/no-empty-lifecycle-method": "off",
+            "@typescript-eslint/no-empty-object-type": "off",
 
-            "@typescript-eslint/explicit-member-accessibility": "error",
+            "@typescript-eslint/explicit-member-accessibility": [
+                "error",
+                {
+                    "overrides": {
+                        "constructors": "no-public",
+                    }
+                }
+            ],
+            "@typescript-eslint/explicit-function-return-type": [
+                "error",
+                {
+                    "allowExpressions": true,
+                    "allowHigherOrderFunctions": true,
+                    "allowIIFEs": true,
+                }
+            ],
+            "@typescript-eslint/consistent-type-definitions": "off",
             "@typescript-eslint/no-explicit-any": "warn",
             "@typescript-eslint/no-inferrable-types": "off",
             "@typescript-eslint/no-empty-function": "off",
@@ -101,7 +128,8 @@ module.exports = tseslint.config(
             "no-unsafe-finally": "off",
             "no-unsafe-optional-chaining": "error",
             "no-unused-vars": "off",
-            "no-var": "error"
+            "no-var": "error",
+            "no-useless-catch": "off",
         },
     },
     {
@@ -110,6 +138,10 @@ module.exports = tseslint.config(
             ...angular.configs.templateRecommended,
             ...angular.configs.templateAccessibility,
         ],
-        rules: {},
+        rules: {
+            "@angular-eslint/template/elements-content": "off",
+            "@angular-eslint/template/click-events-have-key-events": "off",
+            "@angular-eslint/template/interactive-supports-focus": "off",
+        },
     }
 );

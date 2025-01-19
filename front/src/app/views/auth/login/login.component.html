@@ -1,5 +1,9 @@
 <div class="container">
 
+    <div class="loader" *ngIf="isTrying">
+        <app-spinner></app-spinner>
+    </div>
+
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
         <figure class="logo">ANGULAR</figure>
 
@@ -21,7 +25,7 @@
         </label>
         <small>(if unchecked, it last the time of the session)</small>
 
-        <button type="submit" [disabled]="cannotTryToLogin()">Login</button>
+        <button type="submit" [disabled]="cannotTryToLogin">Login</button>
     </form>
 
 </div>

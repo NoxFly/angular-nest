@@ -16,6 +16,9 @@ export function convertTime(time: string, returnUnit: 's' | 'ms'): number {
     return translatedTime;
 }
 
+/**
+ * 
+ */
 const getTranslatedTime = (value: number, unit: string, returnUnit: string): number => {
     if(unit === returnUnit) {
         return value;
